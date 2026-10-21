@@ -216,7 +216,7 @@ settings:
 
 .theme-dark,
 .theme-light {
-  --font-text-theme: Menlo, monospace;
+  --font-text-theme: Menlo, Consolas, "DejaVu Sans Mono", monospace;
   --font-text-size: 23px;
   --font-ui-smaller: 13px;
   /* UI elements */
@@ -480,7 +480,7 @@ div.status-bar-item.plugin-obsidian-vimrc-support.vimrc-support-vim-mode[data-vi
   margin: 1rem 40% 1rem 30%;
 }
 
-/* Ninja Cursor masque le curseur natif uniquement quand son curseur existe. */
+/* Styles du curseur ajoute par Ninja Cursor. */
 .cursorWrapper .x-cursor {
   background: var(--caret-color);
   width: 6px;
@@ -488,15 +488,6 @@ div.status-bar-item.plugin-obsidian-vimrc-support.vimrc-support-vim-mode[data-vi
   top: calc(-6px - var(--header-height));
   height: calc(12px + var(--cursor-height));
   transition: opacity;
-}
-
-body:has(.x-cursor) .cm-editor * {
-  caret-color: transparent;
-}
-
-body:has(.x-cursor) .cm-cursorLayer {
-  animation: none;
-  visibility: hidden;
 }
 
 .cursorWrapper .x-cursor::after {

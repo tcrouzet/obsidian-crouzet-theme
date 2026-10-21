@@ -2,11 +2,11 @@
 
 Thème Solarized pour Obsidian, avec adaptations des composants récents repérés dans [Minimal](https://github.com/kepano/obsidian-minimal). Les sources de départ sont [Solarized 1.1.5](https://github.com/harmtemolder/obsidian-solarized/tree/11cc702755b912abcedbebb6328a32ffddc03eff) et [Minimal 9.1.4](https://github.com/kepano/obsidian-minimal/tree/93321bdc23fc879966e1e3aa0cfeda77012f540f). Licences MIT conservées dans [LICENSE](LICENSE).
 
-Les personnalisations de `tcrouzet.css` sont intégrées au thème : couleurs, typographie des notes, séparateurs, liens et mobile. Ce snippet peut être désactivé lorsque CrouzetTheme est sélectionné. La taille du texte est définie à `23px` par défaut et reste réglable dans Apparence ; le thème conserve la largeur de colonne native d'Obsidian, comme Solarized. Les styles de curseur épais s'appliquent seulement si Ninja Cursor est présent ; aucun plugin n'est installé par le thème.
+Le texte des notes utilise Menlo par défaut, à `23px`, puis Consolas ou DejaVu Sans Mono si Menlo n'est pas disponible. La police et la taille du texte restent réglables dans les préférences d'Obsidian.
 
 ## Modifier et construire
 
-Prérequis : Dart Sass ≥ 1.79 disponible sous la commande `sass`, Python ≥ 3.9 et `curl`. Ces outils sont déjà présents sur la machine de développement.
+Prérequis : Dart Sass ≥ 1.79 disponible sous la commande `sass`, Python ≥ 3.9 et `curl`.
 
 - [scripts/scss/_palette.scss](scripts/scss/_palette.scss) : tons, accents, couleur d’accent par défaut, couleurs de base clair/sombre et réglages Style Settings. Les gris hérités restent disponibles pour conserver le rendu Solarized.
 - [scripts/scss/_variables.scss](scripts/scss/_variables.scss) : association des couleurs aux éléments du thème.
