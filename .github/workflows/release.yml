@@ -1,0 +1,68 @@
+---
+name: Release CrouzetTheme
+
+'on':
+  push:
+    tags:
+      - '[0-9]*'
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Install Sass 1.81.0
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location \
+            https://github.com/sass/dart-sass/releases/download/1.81.0/dart-sass-1.81.0-linux-x64.tar.gz \
+            --output "$RUNNER_TEMP/dart-sass.tar.gz"
+          sass_sha256=762c285da90a5388df9bd6db1d267508b8c71eea36e4faa0ba0bdd9a80837261
+          printf '%s  %s\n' "$sass_sha256" "$RUNNER_TEMP/dart-sass.tar.gz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/dart-sass.tar.gz" -C "$RUNNER_TEMP"
+          printf '%s\n' "$RUNNER_TEMP/dart-sass" >> "$GITHUB_PATH"
+
+      - name: Validate and build
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          version = json.loads(Path('manifest.json').read_text())['version']
+          assert re.fullmatch(r'(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)', version), version
+          assert version == os.environ['RELEASE_TAG'], 'Le tag doit correspondre au manifeste'
+          PY
+          yamllint -d relaxed .github/workflows/release.yml
+          shellcheck release.sh
+          python3 scripts/build.py
+          python3 -B scripts/check.py
+          python3 -B scripts/check_release.py
+
+      - name: Attest build provenance
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
+        with:
+          subject-path: |
+            theme.css
+            manifest.json
+
+      - name: Publish theme
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ github.ref_name }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          gh release create "$RELEASE_TAG" theme.css manifest.json \
+            --verify-tag --title "$RELEASE_TAG" --notes "Release $RELEASE_TAG"

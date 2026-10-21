@@ -44,3 +44,21 @@ python3 -B scripts/check.py
 ```
 
 Le contrôle compile en dossier temporaire, vérifie la synchronisation du CSS racine, la présence des réglages et des composants ajoutés, les ajouts/suppressions détectés par le comparateur et la conservation du CSS en cas d’erreur Sass. Il ne remplace pas une vérification visuelle dans Obsidian.
+
+## Publier une release
+
+Depuis la branche par défaut du dépôt, avec `gh` authentifié et `jq` installé :
+
+```bash
+bash release.sh
+```
+
+Le script vérifie la construction, incrémente automatiquement le patch de `manifest.json` (`0.0.1` → `0.0.2`), commite toutes les modifications présentes et pousse la branche, puis crée et pousse le tag correspondant sans préfixe `v`. Une collision de tag, un push refusé ou un manifeste distant différent interrompt la publication.
+
+[GitHub Actions](.github/workflows/release.yml) reconstruit le thème depuis ce tag avec Sass 1.81.0, vérifie les sources et la correspondance du tag avec le manifeste, atteste les fichiers, puis publie la release avec `theme.css` et `manifest.json` en pièces jointes. Ces deux fichiers sont ceux qu’Obsidian installe. Le compilateur téléchargé est vérifié par SHA-256.
+
+Pour tester le script sans commit, push ni publication réels :
+
+```bash
+python3 -B scripts/check_release.py
+```
