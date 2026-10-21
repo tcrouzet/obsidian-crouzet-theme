@@ -73,6 +73,11 @@ select,
 }
 
 @media (hover: hover) {
+  .mod-settings button.mod-cta:not(:disabled):hover {
+    background-color: var(--text-accent);
+    color: var(--text-on-accent);
+  }
+
   button:not(.clickable-icon):not(.mod-cta):not(.mod-warning):hover,
   select:hover,
   .dropdown:hover,
