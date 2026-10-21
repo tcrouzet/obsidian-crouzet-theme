@@ -1,0 +1,200 @@
+@use 'sass:color';
+@use "sass:map";
+
+$tones: (
+  "base03": 0 43 54,
+  "base02": 7 54 66,
+  "base01": 88 110 117,
+  "base00": 101 123 131,
+  "base0": 131 148 150,
+  "base1": 147 161 161,
+  "base2": 238 232 213,
+  "base3": 253 246 227
+);
+
+$accents: (
+  "yellow": 181 137 0,
+  "orange": 203 75 22,
+  "red": 220 50 47,
+  "pink": 211 54 130, // = magenta
+  "purple": 84 154 204, // = violet
+  "blue": 38 139 210,
+  "cyan": 84 154 204,
+  "green": 133 153 0
+);
+
+$accent: "orange";
+
+.theme-dark,
+.theme-light {
+  /* Overwrite default theme colors */
+  @each $color, $value in $tones {
+    --#{$color}: #{rgb($value)};
+  }
+
+  @each $color, $value in $accents {
+    --color-#{$color}: #{rgb($value)};
+    --color-#{$color}-rgb: #{color.channel(rgb($value), "red", $space: rgb)}, #{color.channel(rgb($value), "green", $space: rgb)}, #{color.channel(rgb($value), "blue", $space: rgb)};
+  }
+
+  --accent-h: #{color.channel(rgb(map.get($accents, $accent)), "hue", $space: hsl)};
+  --accent-s: #{color.channel(rgb(map.get($accents, $accent)), "saturation", $space: hsl)};
+  --accent-l: #{color.channel(rgb(map.get($accents, $accent)), "lightness", $space: hsl)};
+}
+
+/* Style Settings defaults follow the palette maps. */
+
+/*! @settings
+name: Solarized Theme Settings
+id: solarized-theme-settings
+settings:
+  - id: disable-active-line-highlight
+    title: Disable active line highlight
+    description: "By default Solarized highlights the active line. This setting lets you disable that behavior."
+    type: class-toggle
+    default: false
+  - id: tones
+    title: Base Tones
+    type: heading
+    level: 2
+    collapsed: true
+  - id: base03
+    title: base03
+    type: variable-color
+    format: rgb
+    default: rgb(#{map.get($tones, "base03")})
+  - id: base02
+    title: base02
+    type: variable-color
+    format: rgb
+    default: rgb(#{map.get($tones, "base02")})
+  - id: base01
+    title: base01
+    type: variable-color
+    format: rgb
+    default: rgb(#{map.get($tones, "base01")})
+  - id: base00
+    title: base00
+    type: variable-color
+    format: rgb
+    default: rgb(#{map.get($tones, "base00")})
+  - id: base0
+    title: base0
+    type: variable-color
+    format: rgb
+    default: rgb(#{map.get($tones, "base0")})
+  - id: base1
+    title: base1
+    type: variable-color
+    format: rgb
+    default: rgb(#{map.get($tones, "base1")})
+  - id: base2
+    title: base2
+    type: variable-color
+    format: rgb
+    default: rgb(#{map.get($tones, "base2")})
+  - id: base3
+    title: base3
+    type: variable-color
+    format: rgb
+    default: rgb(#{map.get($tones, "base3")})
+  - id: accents
+    description: "NB This does not override Obsidian's built-in accent color (see Appearance > Accent color)"
+    title: Accent Colors
+    type: heading
+    level: 2
+    collapsed: true
+  - id: color-yellow
+    title: yellow
+    type: variable-color
+    format: rgb
+    default: rgb(#{map.get($accents, "yellow")})
+    alt-format:
+    - id: color-yellow-rgb
+      format: rgb-values
+  - id: color-orange
+    title: orange
+    type: variable-color
+    format: rgb
+    default: rgb(#{map.get($accents, "orange")})
+    alt-format:
+    - id: color-orange-rgb
+      format: rgb-values
+  - id: color-red
+    title: red
+    type: variable-color
+    format: rgb
+    default: rgb(#{map.get($accents, "red")})
+    alt-format:
+    - id: color-red-rgb
+      format: rgb-values
+  - id: color-pink
+    title: pink
+    type: variable-color
+    format: rgb
+    default: rgb(#{map.get($accents, "pink")})
+    alt-format:
+    - id: color-pink-rgb
+      format: rgb-values
+  - id: color-purple
+    title: purple
+    type: variable-color
+    format: rgb
+    default: rgb(#{map.get($accents, "purple")})
+    alt-format:
+    - id: color-purple-rgb
+      format: rgb-values
+  - id: color-blue
+    title: blue
+    type: variable-color
+    format: rgb
+    default: rgb(#{map.get($accents, "blue")})
+    alt-format:
+    - id: color-blue-rgb
+      format: rgb-values
+  - id: color-cyan
+    title: cyan
+    type: variable-color
+    format: rgb
+    default: rgb(#{map.get($accents, "cyan")})
+    alt-format:
+    - id: color-cyan-rgb
+      format: rgb-values
+  - id: color-green
+    title: green
+    type: variable-color
+    format: rgb
+    default: rgb(#{map.get($accents, "green")})
+    alt-format:
+    - id: color-green-rgb
+      format: rgb-values
+*/
+
+.theme-dark {
+  --color-base-00: #1e1e1e;
+  --color-base-10: #242424;
+  --color-base-20: #262626;
+  --color-base-25: var(--base03);
+  --color-base-30: var(--base02);
+  --color-base-35: var(--base02);
+  --color-base-40: var(--base0);
+  --color-base-50: #666;
+  --color-base-60: #999;
+  --color-base-70: #bababa;
+  --color-base-100: #dadada;
+}
+
+.theme-light {
+  --color-base-00: var(--base2);
+  --color-base-05: #fcfcfc;
+  --color-base-10: var(--base2);
+  --color-base-20: #f6f6f6;
+  --color-base-25: #e3e3e3;
+  --color-base-30: var(--base2);
+  --color-base-35: var(--base2);
+  --color-base-40: var(--base00);
+  --color-base-50: #ababab;
+  --color-base-60: #707070;
+  --color-base-70: #5a5a5a;
+  --color-base-100: #222222;
+}

@@ -1,0 +1,185 @@
+.cm-s-obsidian {
+  /* Checkboxes */
+  span.cm-formatting-task {
+    color: var(--checkbox-color);
+  }
+
+  /* Links */
+  span.cm-formatting-link {
+    color: var(--link-color);
+
+    &.cm-strikethrough {
+      text-decoration-line: line-through;
+    }
+  }
+
+  span.cm-link {
+    color: var(--link-external-color) !important;
+  }
+
+  span.cm-url {
+    &.cm-strikethrough {
+      text-decoration-line: line-through;
+    }
+  }
+
+  /* Tables */
+  .HyperMD-table-row-0 {
+    font-weight: var(--font-bold);
+  }
+
+  /* Search results */
+  span.obsidian-search-match-highlight {
+    box-shadow: unset;
+    mix-blend-mode: unset;
+    border-radius: unset;
+    background: var(--color-green);
+    color: var(--text-on-accent);
+    padding: 2px 0;
+  }
+
+  /* Code */
+  span.cm-comment {
+    color: var(--code-comment);
+  }
+
+  span.cm-inline-code {
+    padding: 2px 0;
+  }
+
+  /* Highlights */
+  span.cm-formatting-highlight,
+  span.cm-highlight {
+    color: var(--text-on-accent);
+    padding: 2px 0;
+  }
+}
+
+/* More code */
+.cm-def {
+  color: var(--code-function);
+}
+
+.cm-atom {
+  color: var(--code-value);
+}
+
+.cm-hmd-frontmatter.cm-hmd-frontmatter.cm-atom,
+.cm-hmd-frontmatter.cm-hmd-frontmatter.cm-def {
+  color: var(--interactive-accent);
+}
+
+/* Search results */
+.is-flashing {
+  border-radius: unset;
+  --code-normal: var(--text-highlight-bg);
+  --link-color: var(--text-on-accent);
+  --link-color-hover: var(--background-primary-alt);
+  --link-decoration: underline;
+  --link-decoration-hover: none;
+  --link-external-color: var(--text-on-accent);
+  --link-external-color-hover: var(--background-primary-alt);
+  --link-external-decoration: underline;
+  --link-external-decoration-hover: none;
+}
+
+.search-result-file-matched-text {
+  color: var(--text-on-accent);
+  padding: 2px 0;
+}
+
+.markdown-rendered {
+  /* Unresolved links in preview mode */
+  .internal-link.is-unresolved:hover {
+    color: var(--link-unresolved-color-hover);
+    text-decoration-color: var(--link-unresolved-color-hover);
+  }
+
+  /* Highlights in preview mode */
+  mark {
+    color: var(--text-on-accent);
+  }
+}
+
+/* Highlight current line */
+body:not(.disable-active-line-highlight) {
+  & .cm-active {
+    background: var(--active-bg);
+
+    &.cm-gutterElement {
+      color: var(--color-accent);
+    }
+  }
+}
+
+/* Hashtags */
+.cm-hashtag {
+  &.cm-hashtag-begin,
+  &.cm-hashtag-end {
+    border: unset;
+    border-radius: unset;
+  }
+}
+
+/* https://github.com/nothingislost/obsidian-dynamic-highlights */
+.cm-current-word,
+.cm-matched-word,
+.cm-current-string,
+.cm-matched-string {
+  background: var(--color-yellow);
+  color: var(--text-on-accent);
+  text-decoration: none;
+  padding: 2px 0;
+}
+
+/* File explorer */
+.is-flashing {
+  color: var(--text-on-accent) !important;
+}
+
+.workspace-leaf.mod-active {
+  .nav-folder.has-focus > .nav-folder-title,
+  .nav-file.has-focus > .nav-file-title {
+    box-shadow: 0 0 0 2px var(--color-accent);
+  }
+}
+
+/* Community theme and plugin browsers */
+.community-item {
+  &:hover {
+    border-color: var(--color-accent);
+  }
+
+  .suggestion-highlight {
+    color: var(--text-on-accent);
+    font-weight: unset;
+  }
+}
+
+/* Vimrc Support Plugin */
+$vimrc-colors: (
+  "normal": "var(--color-blue)",
+  "insert": "var(--color-green)",
+  "visual": "var(--color-pink)",
+  "replace": "var(--color-red)",
+);
+
+div.status-bar-item.plugin-obsidian-vimrc-support {
+  &.vimrc-support-vim-mode {
+    color: var(--text-on-accent);
+
+    @each $mode, $color in $vimrc-colors {
+      &[data-vim-mode="#{$mode}"] {
+        background-color: #{$color};
+      }
+    }
+  }
+}
+
+/* Mermaid */
+.mermaid {
+  tspan {
+    fill: var(--text-on-accent);
+  }
+}
+

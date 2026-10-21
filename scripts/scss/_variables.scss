@@ -1,0 +1,112 @@
+.theme-dark {
+  /* Background */
+  --background-primary: var(--base03);
+  --background-primary-alt: var(--base02);
+
+  /* Text */
+  --text-normal: var(--base0);
+  --text-muted: var(--base00);
+  --text-faint: var(--base01);
+  --control-text-color: var(--base1);
+  --control-border-color: var(--base0);
+
+  /* File explorer */
+  --active-bg: var(--nav-item-background-active);
+
+  /* Hashtags */
+  --tag-background: color-mix(in oklch, var(--interactive-accent) 20%, transparent);
+}
+
+.theme-light {
+  /* Background */
+  --background-primary: var(--base3);
+  --background-primary-alt: var(--base2);
+
+  /* Text */
+  --text-normal: var(--base00);
+  --text-muted: var(--base0);
+  --text-faint: var(--base1);
+  --control-text-color: var(--base01);
+  --control-border-color: var(--base01);
+
+  /* File explorer */
+  --active-bg: color-mix(in oklch, var(--interactive-accent) 10%, transparent);
+  --nav-item-background-active: var(--active-bg);
+
+  /* Hashtags */
+  --tag-background: color-mix(in oklch, var(--interactive-accent) 10%, transparent);
+}
+
+.theme-dark,
+.theme-light {
+  /* UI elements */
+  --interactive-accent: var(--color-accent);
+  --interactive-normal: var(--background-primary);
+  --interactive-hover: color-mix(in srgb, var(--background-primary) 95%, var(--control-text-color));
+  --dropdown-background: var(--interactive-normal);
+  --dropdown-background-hover: var(--interactive-hover);
+
+  /* Background */
+  --background-secondary: var(--background-primary);
+  --background-secondary-alt: var(--background-primary-alt);
+
+  /* Text */
+  --text-on-accent: var(--background-primary);
+
+  /* Headings */
+  --text-title: var(--color-cyan);
+  --heading-formatting: var(--text-title);
+  --h1-color: var(--text-title);
+  --h2-color: var(--text-title);
+  --h3-color: var(--text-title);
+  --h4-color: var(--text-title);
+  --h5-color: var(--text-title);
+  --h6-color: var(--text-title);
+
+  /* Links */
+  --link-color: var(--color-blue);
+  --link-color-hover: var(--link-color);
+  --link-decoration: none;
+  --link-decoration-hover: underline;
+  --link-external-color: var(--color-purple);
+  --link-external-color-hover: var(--link-external-color);
+  --link-external-decoration: none;
+  --link-external-decoration-hover: underline;
+  --link-unresolved-color: var(--color-red);
+  --link-unresolved-color-hover: var(--link-unresolved-color);
+  --link-unresolved-opacity: unset;
+  --link-unresolved-decoration-color: var(--link-unresolved-color);
+
+  /* Code */
+  --code-normal: var(--text-normal);
+  --code-comment: var(--color-cyan);
+  --code-function: var(--color-blue);
+  --code-important: var(--color-orange);
+  --code-keyword: var(--color-green);
+  --code-operator: var(--code-normal);
+  --code-property: var(--code-normal);
+  --code-punctuation: var(--code-normal);
+  --code-string: var(--color-cyan);
+  --code-tag: var(--color-red);
+  --code-value: var(--color-pink);
+
+  /* Tables */
+  --table-header-size: inherit;
+  --table-header-weight: var(--font-bold);
+  --table-header-color: inherit;
+
+  /* Highlights */
+  --text-highlight-bg: var(--color-accent);
+  --text-highlight-bg-active: var(--color-accent);
+
+  /* Checkboxes in reading view */
+  --checkbox-border-color: var(--interactive-accent);
+  --checkbox-border-color-hover: var(--interactive-accent-hover);
+
+  /* Hashtags */
+  --tag-padding-x: var(--tag-padding-y);
+  --tag-color: var(--color-accent);
+
+  /* Focus border */
+  --background-modifier-border-focus: var(--interactive-accent);
+}
