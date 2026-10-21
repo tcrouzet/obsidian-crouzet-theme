@@ -1,65 +1,65 @@
 # CrouzetTheme
 
-Thème Solarized pour Obsidian, avec adaptations des composants récents repérés dans [Minimal](https://github.com/kepano/obsidian-minimal). Les sources de départ sont [Solarized 1.1.5](https://github.com/harmtemolder/obsidian-solarized/tree/11cc702755b912abcedbebb6328a32ffddc03eff) et [Minimal 9.1.4](https://github.com/kepano/obsidian-minimal/tree/93321bdc23fc879966e1e3aa0cfeda77012f540f). Licences MIT conservées dans [LICENSE](LICENSE).
+Minimalist solarized theme for Obsidian, with support for newer components informed by [Minimal](https://github.com/kepano/obsidian-minimal). Based on [Solarized 1.1.5](https://github.com/harmtemolder/obsidian-solarized/tree/11cc702755b912abcedbebb6328a32ffddc03eff) and [Minimal 9.1.4](https://github.com/kepano/obsidian-minimal/tree/93321bdc23fc879966e1e3aa0cfeda77012f540f).
 
-Le texte des notes utilise Menlo par défaut, à `23px`, puis Consolas ou DejaVu Sans Mono si Menlo n'est pas disponible. La police et la taille du texte restent réglables dans les préférences d'Obsidian.
+Notes use Menlo at `23px` by default, falling back to Consolas or DejaVu Sans Mono when Menlo is unavailable. The font and text size can be changed in Obsidian's settings.
 
-## Modifier et construire
+## Edit and build
 
-Prérequis : Dart Sass ≥ 1.79 disponible sous la commande `sass`, Python ≥ 3.9 et `curl`.
+Requirements: Dart Sass ≥ 1.79 available as `sass`, Python ≥ 3.9, and `curl`.
 
-- [scripts/scss/_palette.scss](scripts/scss/_palette.scss) : tons, accents, couleur d’accent par défaut, couleurs de base clair/sombre et réglages Style Settings. Les gris hérités restent disponibles pour conserver le rendu Solarized.
-- [scripts/scss/_variables.scss](scripts/scss/_variables.scss) : association des couleurs aux éléments du thème.
-- [scripts/scss/_solarized.scss](scripts/scss/_solarized.scss) : règles du thème d’origine.
-- [scripts/scss/_modern.scss](scripts/scss/_modern.scss) : ajouts marqués `A AJUSTER` pour propriétés, tableaux éditables, Bases, Canvas, PDF, graphe, navigation et mobile. Vérifier leur rendu dans Obsidian en clair et sombre.
+- [scripts/scss/_palette.scss](scripts/scss/_palette.scss): tones, accents, default accent color, light/dark base colors, and Style Settings options. Legacy grays remain available to preserve the Solarized appearance.
+- [scripts/scss/_variables.scss](scripts/scss/_variables.scss): theme colors and typography variables.
+- [scripts/scss/_solarized.scss](scripts/scss/_solarized.scss): Solarized rules and note styling.
+- [scripts/scss/_modern.scss](scripts/scss/_modern.scss): additions marked `A AJUSTER` (to adjust) for properties, editable tables, Bases, Canvas, PDF, graph view, navigation, and mobile. Check their appearance in Obsidian in both light and dark modes.
 
-Depuis la racine, construire le fichier `theme.css` chargé par Obsidian :
+From the repository root, build the `theme.css` file loaded by Obsidian:
 
 ```bash
 python3 scripts/build.py
 ```
 
-Reconstruire automatiquement à chaque modification SCSS ; arrêter avec Ctrl+C :
+Rebuild automatically when SCSS files change; stop with Ctrl+C:
 
 ```bash
 python3 scripts/build.py --watch
 ```
 
-Modifier les sources SCSS ; `theme.css` est le résultat de compilation. La compilation conserve le bloc Style Settings et produit un CSS sans fichier source map. Le script compile en mémoire et écrit le résultat après réussite. Une erreur Sass conserve le CSS précédent, y compris en mode surveillance.
+Edit the SCSS sources; `theme.css` is the compiled output. The build preserves the Style Settings block and produces CSS without a source map. The script compiles in memory and writes the result only after a successful compilation. A Sass error preserves the previous CSS, including in watch mode.
 
-## Comparer les mises à jour
+## Compare upstream changes
 
 ```bash
 python3 scripts/update.py
 ```
 
-La commande consulte les deux dépôts publics, compare leurs sources SCSS et manifestes aux révisions examinées inscrites dans `UPSTREAM`, reconstruit le CSS depuis les sources locales, puis écrit les différences dans [scripts/upstream-review.md](scripts/upstream-review.md). Elle ne télécharge aucun code à exécuter et ne lance aucune commande Git.
+The command checks both public repositories, compares their SCSS sources and manifests against the reviewed revisions recorded in `UPSTREAM`, rebuilds the CSS from local sources, and writes the differences to [scripts/upstream-review.md](scripts/upstream-review.md). It does not execute downloaded code or run Git commands.
 
-Adapter les différences utiles dans les sources locales, vérifier le rendu, puis remplacer les révisions dans `UPSTREAM` lorsque leur examen est terminé. Une différence reste signalée jusqu’à cette validation. En cas d’échec réseau, le rapport précédent et les sources locales sont conservés.
+Apply relevant changes to the local sources, check the appearance, and update the revisions in `UPSTREAM` once the review is complete. Differences remain listed until then. If a network request fails, the previous report and local sources are preserved.
 
-La comparaison amont signale les changements depuis les références examinées. Elle ne mesure pas la couverture complète des fonctionnalités de Minimal. Ses options de mise en page, thèmes alternatifs et intégrations de plugins restent des adaptations distinctes ; les composants natifs conservent aussi les styles fournis par Obsidian.
+The comparison reports changes since the reviewed revisions. It does not measure complete coverage of Minimal's features. Layout options, alternative color schemes, and plugin integrations require separate adaptations; native components also retain styles provided by Obsidian.
 
-## Vérifier la construction
+## Verify the build
 
 ```bash
 python3 -B scripts/check.py
 ```
 
-Le contrôle compile en dossier temporaire, vérifie la synchronisation du CSS racine, la présence des réglages et des composants ajoutés, les ajouts/suppressions détectés par le comparateur et la conservation du CSS en cas d’erreur Sass. Il ne remplace pas une vérification visuelle dans Obsidian.
+The check compiles in a temporary directory and verifies that the root CSS matches the sources, that settings and added components are present, that the comparator detects additions and deletions, and that a Sass error preserves the previous CSS. It does not replace a visual check in Obsidian.
 
-## Publier une release
+## Publish a release
 
-Depuis la branche par défaut du dépôt, avec `gh` authentifié et `jq` installé :
+From the repository's default branch, with `gh` authenticated and `jq` installed:
 
 ```bash
 bash release.sh
 ```
 
-Le script vérifie la construction, incrémente automatiquement le patch de `manifest.json` (`0.0.1` → `0.0.2`), commite toutes les modifications présentes et pousse la branche, puis crée et pousse le tag correspondant sans préfixe `v`. Une collision de tag, un push refusé ou un manifeste distant différent interrompt la publication.
+The script verifies the build, automatically increments the patch version in `manifest.json` (`0.0.1` → `0.0.2`), commits all current changes and pushes the branch, then creates and pushes the matching tag without a `v` prefix. A tag collision, rejected push, or mismatched remote manifest stops publication.
 
-[GitHub Actions](.github/workflows/release.yml) reconstruit le thème depuis ce tag avec Sass 1.81.0, vérifie les sources et la correspondance du tag avec le manifeste, atteste les fichiers, puis publie la release avec `theme.css` et `manifest.json` en pièces jointes. Ces deux fichiers sont ceux qu’Obsidian installe. Le compilateur téléchargé est vérifié par SHA-256.
+[GitHub Actions](.github/workflows/release.yml) rebuilds the theme from the tag using Sass 1.81.0, checks the sources and verifies that the tag matches the manifest, attests the files, and publishes the release with `theme.css` and `manifest.json` attached. These are the files Obsidian installs. The downloaded compiler is verified using SHA-256.
 
-Pour tester le script sans commit, push ni publication réels :
+Test the release script without real commits, pushes, or publishing:
 
 ```bash
 python3 -B scripts/check_release.py
