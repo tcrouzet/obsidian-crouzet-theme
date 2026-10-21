@@ -36,11 +36,6 @@
 name: Solarized Theme Settings
 id: solarized-theme-settings
 settings:
-  - id: disable-active-line-highlight
-    title: Disable active line highlight
-    description: "By default Solarized highlights the active line. This setting lets you disable that behavior."
-    type: class-toggle
-    default: false
   - id: tones
     title: Base Tones
     type: heading
@@ -221,6 +216,9 @@ settings:
 
 .theme-dark,
 .theme-light {
+  --font-text-theme: Menlo, monospace;
+  --font-text-size: 23px;
+  --font-ui-smaller: 13px;
   /* UI elements */
   --interactive-accent: var(--color-accent);
   --interactive-normal: var(--background-primary);
@@ -234,6 +232,7 @@ settings:
   --text-on-accent: var(--background-primary);
   /* Headings */
   --text-title: var(--color-cyan);
+  --caret-color: var(--text-title);
   --heading-formatting: var(--text-title);
   --h1-color: var(--text-title);
   --h2-color: var(--text-title);
@@ -249,7 +248,7 @@ settings:
   --link-external-color: var(--color-purple);
   --link-external-color-hover: var(--link-external-color);
   --link-external-decoration: none;
-  --link-external-decoration-hover: underline;
+  --link-external-decoration-hover: none;
   --link-unresolved-color: var(--color-red);
   --link-unresolved-color-hover: var(--link-unresolved-color);
   --link-unresolved-opacity: unset;
@@ -283,6 +282,46 @@ settings:
   --background-modifier-border-focus: var(--interactive-accent);
 }
 
+.markdown-source-view,
+.markdown-preview-view {
+  --embed-block-shadow-hover: none;
+  --font-normal: 500;
+  --font-weight: var(--font-normal);
+  --bold-weight: 700;
+  --link-weight: inherit;
+  --inline-title-margin-bottom: 1rem;
+  --h1-size: 1.5em;
+  --h2-size: 1.3em;
+  --h3-size: 1.125em;
+  --h4-size: 0.90em;
+  --h5-size: 0.85em;
+  --h6-size: 0.85em;
+  --h1-weight: var(--bold-weight);
+  --h2-weight: var(--bold-weight);
+  --h3-weight: var(--bold-weight);
+  --h4-weight: var(--bold-weight);
+  --h5-weight: var(--bold-weight);
+  --h6-weight: var(--bold-weight);
+  --h1-variant: normal;
+  --h2-variant: normal;
+  --h3-variant: normal;
+  --h4-variant: normal;
+  --h5-variant: small-caps;
+  --h6-variant: small-caps;
+  --h1-style: normal;
+  --h2-style: normal;
+  --h3-style: normal;
+  --h4-style: normal;
+  --h5-style: normal;
+  --h6-style: normal;
+  --line-height-normal: calc(1ex / 0.28);
+}
+
+.is-phone {
+  --metadata-label-font-size: var(--font-ui-small);
+  --metadata-input-font-size: var(--font-ui-small);
+}
+
 .cm-s-obsidian {
   /* Checkboxes */
   /* Links */
@@ -298,13 +337,13 @@ settings:
   color: var(--link-color);
 }
 .cm-s-obsidian span.cm-formatting-link.cm-strikethrough {
-  text-decoration-line: line-through;
+  text-decoration: line-through;
 }
-.cm-s-obsidian span.cm-link {
-  color: var(--link-external-color) !important;
+.markdown-source-view.mod-cm6 .cm-s-obsidian span.cm-link {
+  color: var(--link-external-color);
 }
 .cm-s-obsidian span.cm-url.cm-strikethrough {
-  text-decoration-line: line-through;
+  text-decoration: line-through;
 }
 .cm-s-obsidian .HyperMD-table-row-0 {
   font-weight: var(--font-bold);
@@ -368,18 +407,10 @@ settings:
 }
 .markdown-rendered .internal-link.is-unresolved:hover {
   color: var(--link-unresolved-color-hover);
-  text-decoration-color: var(--link-unresolved-color-hover);
+  --link-unresolved-decoration-color: var(--link-unresolved-color-hover);
 }
 .markdown-rendered mark {
   color: var(--text-on-accent);
-}
-
-/* Highlight current line */
-body:not(.disable-active-line-highlight) .cm-active {
-  background: var(--active-bg);
-}
-body:not(.disable-active-line-highlight) .cm-active.cm-gutterElement {
-  color: var(--color-accent);
 }
 
 /* Hashtags */
@@ -400,8 +431,8 @@ body:not(.disable-active-line-highlight) .cm-active.cm-gutterElement {
 }
 
 /* File explorer */
-.is-flashing {
-  color: var(--text-on-accent) !important;
+body .workspace .is-flashing {
+  color: var(--text-on-accent);
 }
 
 .workspace-leaf.mod-active .nav-folder.has-focus > .nav-folder-title,
@@ -440,6 +471,86 @@ div.status-bar-item.plugin-obsidian-vimrc-support.vimrc-support-vim-mode[data-vi
   fill: var(--text-on-accent);
 }
 
+.markdown-source-view.mod-cm6 .cm-active {
+  background: none;
+}
+
+.markdown-source-view.mod-cm6.is-live-preview .cm-line hr {
+  border-color: var(--color-cyan);
+  margin: 1rem 40% 1rem 30%;
+}
+
+/* Ninja Cursor masque le curseur natif uniquement quand son curseur existe. */
+.cursorWrapper .x-cursor {
+  background: var(--caret-color);
+  width: 6px;
+  left: -1px;
+  top: calc(-6px - var(--header-height));
+  height: calc(12px + var(--cursor-height));
+  transition: opacity;
+}
+
+body:has(.x-cursor) .cm-editor * {
+  caret-color: transparent;
+}
+
+body:has(.x-cursor) .cm-cursorLayer {
+  animation: none;
+  visibility: hidden;
+}
+
+.cursorWrapper .x-cursor::after {
+  display: none;
+}
+
+.cursorWrapper .x-cursor0 {
+  animation: crouzet-cursor-blink0 1s 1s both infinite;
+}
+
+.cursorWrapper .x-cursor1 {
+  animation: crouzet-cursor-blink1 1s 1s both infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursorWrapper .x-cursor {
+    animation: none;
+    transition: none;
+  }
+}
+@keyframes crouzet-cursor-blink0 {
+  0% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  95% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.3;
+  }
+}
+@keyframes crouzet-cursor-blink1 {
+  0% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  95% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.3;
+  }
+}
 /* A AJUSTER : surfaces et contrastes des composants recents, en clair et sombre.
    References Minimal : variables/theme.scss, variables/root.scss. */
 .theme-dark,

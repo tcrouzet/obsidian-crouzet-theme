@@ -9,17 +9,19 @@
     color: var(--link-color);
 
     &.cm-strikethrough {
-      text-decoration-line: line-through;
+      text-decoration: line-through;
     }
   }
 
   span.cm-link {
-    color: var(--link-external-color) !important;
+    .markdown-source-view.mod-cm6 & {
+      color: var(--link-external-color);
+    }
   }
 
   span.cm-url {
     &.cm-strikethrough {
-      text-decoration-line: line-through;
+      text-decoration: line-through;
     }
   }
 
@@ -92,23 +94,12 @@
   /* Unresolved links in preview mode */
   .internal-link.is-unresolved:hover {
     color: var(--link-unresolved-color-hover);
-    text-decoration-color: var(--link-unresolved-color-hover);
+    --link-unresolved-decoration-color: var(--link-unresolved-color-hover);
   }
 
   /* Highlights in preview mode */
   mark {
     color: var(--text-on-accent);
-  }
-}
-
-/* Highlight current line */
-body:not(.disable-active-line-highlight) {
-  & .cm-active {
-    background: var(--active-bg);
-
-    &.cm-gutterElement {
-      color: var(--color-accent);
-    }
   }
 }
 
@@ -133,8 +124,8 @@ body:not(.disable-active-line-highlight) {
 }
 
 /* File explorer */
-.is-flashing {
-  color: var(--text-on-accent) !important;
+body .workspace .is-flashing {
+  color: var(--text-on-accent);
 }
 
 .workspace-leaf.mod-active {
@@ -183,3 +174,65 @@ div.status-bar-item.plugin-obsidian-vimrc-support {
   }
 }
 
+.markdown-source-view.mod-cm6 .cm-active {
+  background: none;
+}
+
+.markdown-source-view.mod-cm6.is-live-preview .cm-line hr {
+  border-color: var(--color-cyan);
+  margin: 1rem 40% 1rem 30%;
+}
+
+/* Ninja Cursor masque le curseur natif uniquement quand son curseur existe. */
+.cursorWrapper .x-cursor {
+  background: var(--caret-color);
+  width: 6px;
+  left: -1px;
+  top: calc(-6px - var(--header-height));
+  height: calc(12px + var(--cursor-height));
+  transition: opacity;
+}
+
+body:has(.x-cursor) .cm-editor * {
+  caret-color: transparent;
+}
+
+body:has(.x-cursor) .cm-cursorLayer {
+  animation: none;
+  visibility: hidden;
+}
+
+.cursorWrapper .x-cursor::after {
+  display: none;
+}
+
+.cursorWrapper .x-cursor0 {
+  animation: crouzet-cursor-blink0 1s 1s both infinite;
+}
+
+.cursorWrapper .x-cursor1 {
+  animation: crouzet-cursor-blink1 1s 1s both infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursorWrapper .x-cursor {
+    animation: none;
+    transition: none;
+  }
+}
+
+@keyframes crouzet-cursor-blink0 {
+  0% { opacity: 1; }
+  45% { opacity: 1; }
+  50% { opacity: 0.3; }
+  95% { opacity: 0; }
+  100% { opacity: 0.3; }
+}
+
+@keyframes crouzet-cursor-blink1 {
+  0% { opacity: 1; }
+  45% { opacity: 1; }
+  50% { opacity: 0.3; }
+  95% { opacity: 0; }
+  100% { opacity: 0.3; }
+}

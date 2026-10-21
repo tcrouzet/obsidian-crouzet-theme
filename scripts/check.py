@@ -51,7 +51,7 @@ def main():
         assert failure.returncode != 0 and "Error" in failure.stderr
         assert (root / "theme.css").read_text() == css, "CSS altere apres erreur Sass"
         palette.write_text(original)
-        print("OK : erreur Sass signalee, CSS precedent conserve")
+        print("OK : test de protection CSS reussi (erreur Sass simulee)")
 
         shutil.copy2(ROOT / "scripts/update.py", root / "scripts/update.py")
         report = root / "scripts/upstream-review.md"
@@ -66,7 +66,7 @@ def main():
         assert report.read_text() == "Rapport precedent\n"
         assert (root / "theme.css").read_text() == css
         assert palette.read_text() == original
-        print("OK : echec reseau signale, rapport, CSS et sources conserves")
+        print("OK : test de conservation des fichiers reussi (panne reseau simulee)")
 
         watcher = subprocess.Popen(command + ["--watch"],
                                    stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)

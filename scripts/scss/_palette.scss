@@ -48,11 +48,6 @@ $accent: "orange";
 name: Solarized Theme Settings
 id: solarized-theme-settings
 settings:
-  - id: disable-active-line-highlight
-    title: Disable active line highlight
-    description: "By default Solarized highlights the active line. This setting lets you disable that behavior."
-    type: class-toggle
-    default: false
   - id: tones
     title: Base Tones
     type: heading
