@@ -46,6 +46,23 @@
   --blockquote-color: var(--text-muted);
 }
 
+.theme-light .mod-settings {
+  --text-accent: color-mix(in srgb, var(--color-blue) 65%, var(--base03));
+}
+
+.theme-dark .mod-settings {
+  --text-accent: color-mix(in srgb, var(--color-blue) 80%, var(--base3));
+}
+
+.mod-settings {
+  --text-accent-hover: var(--text-accent);
+
+  a,
+  a:hover {
+    color: var(--text-accent);
+  }
+}
+
 button:not(.clickable-icon):not(.mod-cta):not(.mod-warning),
 select,
 .dropdown,
