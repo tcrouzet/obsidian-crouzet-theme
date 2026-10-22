@@ -10,7 +10,7 @@
   --background-modifier-success: var(--color-green);
   --background-modifier-error: color-mix(in oklch, var(--color-red) 15%, transparent);
   --background-modifier-error-hover: color-mix(in oklch, var(--color-red) 25%, transparent);
-  --background-modifier-message: var(--background-primary-alt);
+  --background-modifier-message: var(--base03);
   --interactive-accent-hover: var(--color-accent-1);
   --text-accent: var(--color-accent);
   --text-accent-hover: var(--color-accent-1);
@@ -44,6 +44,11 @@
   --code-background: var(--background-primary-alt);
   --blockquote-border-color: var(--color-cyan);
   --blockquote-color: var(--text-muted);
+}
+
+.notice {
+  --text-normal: var(--base3);
+  color: var(--text-normal);
 }
 
 .theme-light .mod-settings {
