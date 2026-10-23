@@ -39,7 +39,6 @@ body.theme-light,
 body.theme-dark {
   --tag-color: var(--tag_color);
   --tag-color-hover: var(--tag_color);
-  --hr-color: var(--separator_color);
 }
 
 .metadata-container {
@@ -56,7 +55,10 @@ body.theme-dark {
   color: var(--yaml_key_color);
 }
 
-.markdown-source-view.mod-cm6 .cm-hmd-frontmatter.cm-def,
+.markdown-source-view.mod-cm6 .cm-hmd-frontmatter.cm-def {
+  color: var(--text-muted);
+}
+
 .markdown-source-view.mod-cm6 .cm-hmd-frontmatter.cm-meta {
   color: var(--separator_color);
 }

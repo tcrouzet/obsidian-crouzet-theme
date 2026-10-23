@@ -43,7 +43,7 @@
   --tag_color: var(--solarized-orange);            /* Tags des notes et des propriétés, au repos et au survol. */
   --yaml_key_color: var(--solarized-orange);       /* Noms des propriétés et clés du frontmatter YAML brut. */
   --yaml_value_color: var(--solarized-green);      /* Texte des propriétés et valeurs du frontmatter YAML brut. */
-  --separator_color: var(--solarized-violet);      /* Séparateurs Markdown, délimiteurs et ponctuation du frontmatter YAML. */
+  --separator_color: var(--solarized-violet);      /* Ponctuation du frontmatter YAML (:, listes). */
 }
 
 :root {

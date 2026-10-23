@@ -8795,7 +8795,7 @@ settings:
   --tag_color: var(--solarized-orange);            /* Tags des notes et des propriétés, au repos et au survol. */
   --yaml_key_color: var(--solarized-orange);       /* Noms des propriétés et clés du frontmatter YAML brut. */
   --yaml_value_color: var(--solarized-green);      /* Texte des propriétés et valeurs du frontmatter YAML brut. */
-  --separator_color: var(--solarized-violet);      /* Séparateurs Markdown, délimiteurs et ponctuation du frontmatter YAML. */
+  --separator_color: var(--solarized-violet);      /* Ponctuation du frontmatter YAML (:, listes). */
 }
 
 :root {
@@ -8918,7 +8918,6 @@ body.theme-light,
 body.theme-dark {
   --tag-color: var(--tag_color);
   --tag-color-hover: var(--tag_color);
-  --hr-color: var(--separator_color);
 }
 
 .metadata-container {
@@ -8935,7 +8934,10 @@ body.theme-dark {
   color: var(--yaml_key_color);
 }
 
-.markdown-source-view.mod-cm6 .cm-hmd-frontmatter.cm-def,
+.markdown-source-view.mod-cm6 .cm-hmd-frontmatter.cm-def {
+  color: var(--text-muted);
+}
+
 .markdown-source-view.mod-cm6 .cm-hmd-frontmatter.cm-meta {
   color: var(--separator_color);
 }
