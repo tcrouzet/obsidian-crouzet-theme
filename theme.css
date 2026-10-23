@@ -8794,6 +8794,10 @@ settings:
   --chart_color: var(--solarized-magenta);          /* Couleur 8 du plugin Charts, pour les graphiques et séries supplémentaires. */
 }
 
+:root {
+  --text_max_width: 40rem; /* Largeur maximale de la colonne en édition et lecture, avec « Longueur de ligne lisible » activée dans Obsidian. */
+}
+
 /* Minimal variables derived from palette.css. */
 .theme-light,
 .theme-dark,
@@ -8903,6 +8907,7 @@ settings:
   --font-text-theme: Menlo, Consolas, "DejaVu Sans Mono", monospace;
   --font-editor-theme: var(--font-text-theme);
   --font-text-size: 23px;
+  --line-width: var(--text_max_width);
 }
 .mod-warning {
   --text-on-accent: var(--base3);

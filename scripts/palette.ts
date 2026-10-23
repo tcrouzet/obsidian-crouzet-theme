@@ -23,7 +23,8 @@ export function compilePalette(css: string): string {
     if (!/^#[a-f\d]{6}$/i.test(value)) throw new Error(`Palette : --${name} doit avoir une couleur #RRGGBB ou une reference var() valide`);
     return value.slice(1).match(/../g)!.map(channel => parseInt(channel, 16));
   }
-  const colors = new Map([...definitions.keys()].map(name => [name, resolve(name)]));
+  const colors = new Map([...definitions.keys()].filter(name => name !== "text_max_width")
+    .map(name => [name, resolve(name)]));
   const names = {
     base3: "screen_background", base2: "panel_background",
     base00: "text_color", base01: "muted_text",

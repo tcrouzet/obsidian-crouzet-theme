@@ -41,3 +41,7 @@
   --success_color: var(--solarized-green);          /* Fonds d'état de réussite et teintes vertes des composants ; couleur 4 de Charts. */
   --chart_color: var(--solarized-magenta);          /* Couleur 8 du plugin Charts, pour les graphiques et séries supplémentaires. */
 }
+
+:root {
+  --text_max_width: 40rem; /* Largeur maximale de la colonne en édition et lecture, avec « Longueur de ligne lisible » activée dans Obsidian. */
+}

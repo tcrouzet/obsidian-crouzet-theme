@@ -32,6 +32,7 @@ export function customize(): string {
   --font-text-theme: Menlo, Consolas, "DejaVu Sans Mono", monospace;
   --font-editor-theme: var(--font-text-theme);
   --font-text-size: 23px;
+  --line-width: var(--text_max_width);
 }
 .mod-warning {
   --text-on-accent: var(--base3);

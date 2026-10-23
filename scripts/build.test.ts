@@ -69,14 +69,17 @@ test("root CSS is reproducible and retains the entire pinned Minimal stylesheet"
   assert.match(output, /--active-line-bg: transparent/);
 });
 
-test("CSS palette changes are injected and update derived RGB and HSL channels", t => {
+test("CSS palette changes inject column width and update derived RGB and HSL channels", t => {
   const root = fixture(t);
   const edited = palette.replace("#268bd2", "#ff0000")
-    .replace(/--action_color:\s*[^;]+/, "--action_color: var(--solarized-blue)");
+    .replace(/--action_color:\s*[^;]+/, "--action_color: var(--solarized-blue)")
+    .replace(/--text_max_width:\s*[^;]+/, "--text_max_width: 45rem");
   writeFileSync(join(root, "palette.css"), edited);
   build(root);
   const output = readFileSync(join(root, "theme.css"), "utf8");
   assert.ok(output.includes(edited));
+  assert.match(output, /--text_max_width: 45rem;/);
+  assert.match(output, /--line-width: var\(--text_max_width\);/);
   assert.match(output, /--color-blue-rgb: 255, 0, 0;/);
   assert.match(output, /--accent-h: 0;/);
   assert.match(output, /--accent-s: 100%;/);
