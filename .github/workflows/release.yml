@@ -21,34 +21,27 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install Sass 1.81.0
-        run: |
-          set -euo pipefail
-          curl --fail --silent --show-error --location \
-            https://github.com/sass/dart-sass/releases/download/1.81.0/dart-sass-1.81.0-linux-x64.tar.gz \
-            --output "$RUNNER_TEMP/dart-sass.tar.gz"
-          sass_sha256=762c285da90a5388df9bd6db1d267508b8c71eea36e4faa0ba0bdd9a80837261
-          printf '%s  %s\n' "$sass_sha256" "$RUNNER_TEMP/dart-sass.tar.gz" | sha256sum --check
-          tar -xzf "$RUNNER_TEMP/dart-sass.tar.gz" -C "$RUNNER_TEMP"
-          printf '%s\n' "$RUNNER_TEMP/dart-sass" >> "$GITHUB_PATH"
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24.12.0'
 
       - name: Validate and build
         env:
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
           set -euo pipefail
-          python3 - <<'PY'
-          import json, os, re
-          from pathlib import Path
-          version = json.loads(Path('manifest.json').read_text())['version']
-          assert re.fullmatch(r'(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)', version), version
-          assert version == os.environ['RELEASE_TAG'], 'Le tag doit correspondre au manifeste'
-          PY
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { readFileSync } from 'node:fs';
+          import { VERSION } from './scripts/build.ts';
+          const { version } = JSON.parse(readFileSync('manifest.json', 'utf8'));
+          assert.match(version, VERSION);
+          assert.equal(version, process.env.RELEASE_TAG, 'Le tag doit correspondre au manifeste');
+          JS
           yamllint -d relaxed .github/workflows/release.yml
           shellcheck release.sh
-          python3 scripts/build.py
-          python3 -B scripts/check.py
-          python3 -B scripts/check_release.py
+          npm run build
+          npm test
 
       - name: Attest build provenance
         uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4

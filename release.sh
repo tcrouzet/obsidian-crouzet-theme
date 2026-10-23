@@ -29,8 +29,8 @@ remote_tag=$(git ls-remote --tags origin "refs/tags/$release_tag")
   exit 1
 }
 
-python3 scripts/build.py
-python3 -B scripts/check.py
+npm run build
+npm run check
 
 manifest_temp=$(mktemp .manifest.XXXXXX)
 trap 'rm -f "$manifest_temp"' EXIT

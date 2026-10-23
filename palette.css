@@ -1,0 +1,43 @@
+/* Nuancier Solarized : https://ethanschoonover.com/solarized/ */
+:root {
+  --solarized-base03: #002b36;
+  --solarized-base02: #073642;
+  --solarized-base01: #586e75;
+  --solarized-base00: #657b83;
+  --solarized-base0: #839496;
+  --solarized-base1: #93a1a1;
+  --solarized-base2: #eee8d5;
+  --solarized-base3: #fdf6e3;
+  --solarized-yellow: #b58900;
+  --solarized-orange: #cb4b16;
+  --solarized-red: #dc322f;
+  --solarized-magenta: #d33682;
+  --solarized-violet: #6c71c4;
+  --solarized-blue: #268bd2;
+  --solarized-cyan: #2aa198;
+  --solarized-green: #859900;
+}
+
+/* Couleurs du thème ; inversion automatique des tons en mode sombre.
+   Filets, contours et boutons neutres : mélanges du fond principal et du texte.
+   Focus : ton du texte discret. Survols et sélections : bleu en transparence.
+   Charts utilise toujours l'orange Solarized pour sa couleur 5 ; cyan et violet Solarized restent disponibles sans affectation par défaut.
+   Les couleurs propres aux plugins et moteurs de coloration syntaxique peuvent rester indépendantes. */
+:root {
+  --screen_background: var(--solarized-base3);      /* Éditeur et lecture, explorateur, onglets gauches, ruban de commandes, champs et résultats de recherche ; texte des actions et notifications. */
+  --panel_background: var(--solarized-base2);       /* Menus, panneau droit, fonds secondaires et lignes alternées des tableaux ; en-têtes selon les options de Minimal. */
+  --text_color: var(--solarized-base00);            /* Texte principal des notes et de l'interface, gras/italique, code non coloré, fichiers et onglets actifs. */
+  --muted_text: var(--solarized-base01);            /* Descriptions, libellés secondaires, icônes au repos, arborescence et citations. */
+  --faint_text: var(--solarized-base1);             /* Texte discret, marqueurs de listes, signes Markdown et bordures de focus. */
+  --inverse_text: var(--solarized-base0);           /* Équivalent sombre du texte principal : notes, interface, code non coloré et éléments actifs. */
+  --inverse_background: var(--solarized-base03);    /* Fond sombre de l'éditeur, explorateur et ruban ; fond des notifications dans les deux modes. */
+  --inverse_panel: var(--solarized-base02);         /* Équivalent sombre des menus, panneau droit, fonds secondaires et lignes alternées des tableaux. */
+  --link_color: var(--solarized-blue);              /* Liens internes et des réglages, sélection/survol en transparence, boutons d'action survolés ; couleur 1 de Charts. */
+  --heading_color: var(--solarized-blue);           /* Titres H1-H6 et titre de note, curseur, liens survolés et variations de l'accent ; couleur 7 de Charts. */
+  --external_link_color: var(--solarized-blue);     /* Liens externes en édition et lecture ; couleur 6 de Charts. */
+  --action_color: var(--solarized-orange);          /* Boutons d'action (.mod-cta), cases cochées, interrupteurs actifs et contrôles utilisant l'accent Obsidian. */
+  --error_color: var(--solarized-red);              /* Erreurs, actions destructives et liens non résolus ; couleur 2 de Charts. */
+  --highlight_color: var(--solarized-yellow);       /* Surlignage Markdown/HTML, correspondances de recherche selon Obsidian ; couleur 3 de Charts. */
+  --success_color: var(--solarized-green);          /* Fonds d'état de réussite et teintes vertes des composants ; couleur 4 de Charts. */
+  --chart_color: var(--solarized-magenta);          /* Couleur 8 du plugin Charts, pour les graphiques et séries supplémentaires. */
+}

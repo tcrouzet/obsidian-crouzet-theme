@@ -1,51 +1,52 @@
 # CrouzetTheme
 
-Minimalist solarized theme for Obsidian, with support for newer components informed by [Minimal](https://github.com/kepano/obsidian-minimal). Based on [Solarized 1.1.5](https://github.com/harmtemolder/obsidian-solarized/tree/11cc702755b912abcedbebb6328a32ffddc03eff) and [Minimal 9.1.4](https://github.com/kepano/obsidian-minimal/tree/93321bdc23fc879966e1e3aa0cfeda77012f540f).
+Minimalist Solarized theme for Obsidian, built from the complete [Minimal](https://github.com/kepano/obsidian-minimal) stylesheet. Minimal provides the layouts and components; a separate palette supplies Solarized colors in light and dark modes, with blue headings and links.
 
 Notes use Menlo at `23px` by default, falling back to Consolas or DejaVu Sans Mono when Menlo is unavailable. The font and text size can be changed in Obsidian's settings.
 
 ## Edit and build
 
-Requirements: Dart Sass ≥ 1.79 available as `sass`, Python ≥ 3.9, and `curl`.
+Requires Node.js ≥ 24.12.0 and npm. No package installation is needed: Node runs the TypeScript scripts directly.
 
-- [scripts/scss/_palette.scss](scripts/scss/_palette.scss): tones, accents, default accent color, light/dark base colors, and Style Settings options. Legacy grays remain available to preserve the Solarized appearance.
-- [scripts/scss/_variables.scss](scripts/scss/_variables.scss): theme colors and typography variables.
-- [scripts/scss/_solarized.scss](scripts/scss/_solarized.scss): Solarized rules and note styling.
-- [scripts/scss/_modern.scss](scripts/scss/_modern.scss): additions marked `A AJUSTER` (to adjust) for properties, editable tables, Bases, Canvas, PDF, graph view, navigation, and mobile. Check their appearance in Obsidian in both light and dark modes.
+- [palette.css](palette.css): the complete Solarized swatches as `#RRGGBB` values, followed by theme colors assigned through `var()` references and comments explaining their use. Dark mode reverses the neutral tones automatically. The explorer shares the editor background, with a thin divider.
+- [scripts/palette.ts](scripts/palette.ts): maps the palette to Minimal's variables and calculates light/dark colors and RGB/HSL channels.
+- [scripts/customize.ts](scripts/customize.ts): note typography, blue headings and links, cursor color, notifications and flat settings defaults.
+- [scripts/minimal/version.json](scripts/minimal/version.json): pinned Minimal version, commit, CSS SHA-256 and minimum Obsidian version.
+- [scripts/minimal/theme.css](scripts/minimal/theme.css): unmodified upstream stylesheet, with its [MIT license](scripts/minimal/LICENSE).
 
 From the repository root, build the `theme.css` file loaded by Obsidian:
 
 ```bash
-python3 scripts/build.py
+npm run build
 ```
 
-Rebuild automatically when SCSS files change; stop with Ctrl+C:
+Rebuild automatically when `palette.css` or imported TypeScript files change; stop with Ctrl+C:
 
 ```bash
-python3 scripts/build.py --watch
+npm run dev
 ```
 
-Edit the SCSS sources; `theme.css` is the compiled output. The build preserves the Style Settings block and produces CSS without a source map. The script compiles in memory and writes the result only after a successful compilation. A Sass error preserves the previous CSS, including in watch mode.
+The build verifies the local Minimal copy, appends `palette.css` and the note defaults, then atomically replaces `theme.css`. It works offline and preserves the previous CSS if validation fails. Edit `palette.css` for colors and the TypeScript sources for build logic and note defaults; the root CSS is generated. Minimal's Style Settings sections remain available, and no interface or code font is imposed.
 
-## Compare upstream changes
+## Update Minimal
 
 ```bash
-python3 scripts/update.py
+npm run update
 ```
 
-The command checks both public repositories, compares their SCSS sources and manifests against the reviewed revisions recorded in `UPSTREAM`, rebuilds the CSS from local sources, and writes the differences to [scripts/upstream-review.md](scripts/upstream-review.md). It does not execute downloaded code or run Git commands.
+The command checks Minimal's latest stable GitHub release. A newer release downloads the CSS, manifest and license from its exact commit, records the version and SHA-256, then rebuilds CrouzetTheme. When already current, it rebuilds from the local copy without downloading the stylesheet again. It never downgrades the pinned version.
 
-Apply relevant changes to the local sources, check the appearance, and update the revisions in `UPSTREAM` once the review is complete. Differences remain listed until then. If a network request fails, the previous report and local sources are preserved.
+Downloads and validation finish before local files are replaced. A network or validation failure leaves the sources and generated CSS intact. If Minimal requires a newer Obsidian version, the theme's `minAppVersion` is raised accordingly; its release version stays unchanged. The updater runs no downloaded scripts or Git commands.
 
-The comparison reports changes since the reviewed revisions. It does not measure complete coverage of Minimal's features. Layout options, alternative color schemes, and plugin integrations require separate adaptations; native components also retain styles provided by Obsidian.
+After an update, review the appearance in Obsidian in both modes. The build checks Minimal's required palette variables, but upstream visual changes can still need adjustments in the local palette. Builds and releases use the pinned local copy and never check the network automatically.
 
 ## Verify the build
 
 ```bash
-python3 -B scripts/check.py
+npm test
 ```
 
-The check compiles in a temporary directory and verifies that the root CSS matches the sources, that settings and added components are present, that the comparator detects additions and deletions, and that a Sass error preserves the previous CSS. It does not replace a visual check in Obsidian.
+Tests cover reproducibility, paths with spaces, palette injection and derived channels, integrity checks, updates and unchanged releases, failed downloads, invalid upstream files, CSS/TypeScript watch mode and release safeguards. Git and GitHub publication commands are simulated; the build runs for real.
 
 ## Publish a release
 
@@ -57,10 +58,4 @@ bash release.sh
 
 The script verifies the build, automatically increments the patch version in `manifest.json` (`0.0.1` → `0.0.2`), commits all current changes and pushes the branch, then creates and pushes the matching tag without a `v` prefix. A tag collision, rejected push, or mismatched remote manifest stops publication.
 
-[GitHub Actions](.github/workflows/release.yml) rebuilds the theme from the tag using Sass 1.81.0, checks the sources and verifies that the tag matches the manifest, attests the files, and publishes the release with `theme.css` and `manifest.json` attached. These are the files Obsidian installs. The downloaded compiler is verified using SHA-256.
-
-Test the release script without real commits, pushes, or publishing:
-
-```bash
-python3 -B scripts/check_release.py
-```
+[GitHub Actions](.github/workflows/release.yml) rebuilds the pinned theme with Node.js 24.12.0, runs the tests and verifies that the tag matches the manifest, attests the files, and publishes the release with `theme.css` and `manifest.json` attached. These are the files Obsidian installs.
