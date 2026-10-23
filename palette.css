@@ -21,7 +21,7 @@
 /* Couleurs du thème ; inversion automatique des tons en mode sombre.
    Filets, contours et boutons neutres : mélanges du fond principal et du texte.
    Focus : ton du texte discret. Survols et sélections : bleu en transparence.
-   Charts utilise toujours l'orange Solarized pour sa couleur 5 ; cyan et violet Solarized restent disponibles sans affectation par défaut.
+   Charts utilise toujours l'orange Solarized pour sa couleur 5 ; cyan Solarized reste disponible sans affectation par défaut.
    Les couleurs propres aux plugins et moteurs de coloration syntaxique peuvent rester indépendantes. */
 :root {
   --screen_background: var(--solarized-base3);      /* Éditeur et lecture, explorateur, onglets gauches, ruban de commandes, champs et résultats de recherche ; texte des actions et notifications. */
@@ -40,6 +40,10 @@
   --highlight_color: var(--solarized-yellow);       /* Surlignage Markdown/HTML, correspondances de recherche selon Obsidian ; couleur 3 de Charts. */
   --success_color: var(--solarized-green);          /* Fonds d'état de réussite et teintes vertes des composants ; couleur 4 de Charts. */
   --chart_color: var(--solarized-magenta);          /* Couleur 8 du plugin Charts, pour les graphiques et séries supplémentaires. */
+  --tag_color: var(--solarized-orange);            /* Tags des notes et des propriétés, au repos et au survol. */
+  --yaml_key_color: var(--solarized-orange);       /* Noms des propriétés et clés du frontmatter YAML brut. */
+  --yaml_value_color: var(--solarized-green);      /* Texte des propriétés et valeurs du frontmatter YAML brut. */
+  --separator_color: var(--solarized-violet);      /* Séparateurs Markdown, délimiteurs et ponctuation du frontmatter YAML. */
 }
 
 :root {

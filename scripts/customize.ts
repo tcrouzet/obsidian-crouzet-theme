@@ -34,6 +34,33 @@ export function customize(): string {
   --font-text-size: 23px;
   --line-width: var(--text_max_width);
 }
+
+body.theme-light,
+body.theme-dark {
+  --tag-color: var(--tag_color);
+  --tag-color-hover: var(--tag_color);
+  --hr-color: var(--separator_color);
+}
+
+.metadata-container {
+  --metadata-label-text-color: var(--yaml_key_color);
+  --metadata-input-text-color: var(--yaml_value_color);
+  line-height: var(--line-height);
+}
+
+.markdown-source-view.mod-cm6 .cm-hmd-frontmatter {
+  color: var(--yaml_value_color);
+}
+
+.markdown-source-view.mod-cm6 .cm-hmd-frontmatter.cm-atom {
+  color: var(--yaml_key_color);
+}
+
+.markdown-source-view.mod-cm6 .cm-hmd-frontmatter.cm-def,
+.markdown-source-view.mod-cm6 .cm-hmd-frontmatter.cm-meta {
+  color: var(--separator_color);
+}
+
 .mod-warning {
   --text-on-accent: var(--base3);
 }
