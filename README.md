@@ -20,7 +20,7 @@ From the repository root, build the `theme.css` file loaded by Obsidian:
 npm run build
 ```
 
-Set `--text_max_width` in `palette.css` to adjust the maximum text column width in editing and reading views (default: `40rem`). Obsidian's **Readable line length** setting must be enabled; narrow panes keep Minimal's responsive margins.
+Set `--text_max_width` in `palette.css` to adjust the maximum text column width in editing and reading views (default: `750px`). Obsidian's **Readable line length** setting must be enabled; narrow panes keep Minimal's responsive margins.
 
 Rebuild automatically when `palette.css` or imported TypeScript files change; stop with Ctrl+C:
 
