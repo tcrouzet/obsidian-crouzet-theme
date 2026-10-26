@@ -42,6 +42,24 @@ body.theme-dark {
   --tag-color-hover: var(--tag_color);
 }
 
+:where(input, textarea, select, .dropdown, .combobox-button, .multi-select-container) {
+  --background-modifier-border: var(--input-border-color);
+}
+
+select,
+.dropdown,
+.combobox-button {
+  border: var(--input-border-width) solid var(--dropdown-border-color);
+}
+
+@media (hover: hover) {
+  select:hover,
+  .dropdown:hover,
+  .combobox-button:hover {
+    border-color: var(--dropdown-border-color-hover);
+  }
+}
+
 .metadata-container {
   --metadata-label-text-color: var(--yaml_key_color);
   --metadata-input-text-color: var(--yaml_value_color);

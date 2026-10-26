@@ -69,11 +69,15 @@ test("root CSS is reproducible and retains the entire pinned Minimal stylesheet"
   assert.match(output, /--active-line-bg: transparent/);
 });
 
-test("CSS palette changes inject column width and update derived RGB and HSL channels", t => {
+test("CSS palette changes inject column width, interface backgrounds and derived color channels", t => {
   const root = fixture(t);
-  const edited = palette.replace("#268bd2", "#ff0000")
+  const edited = palette.replaceAll("#268bd2", "#ff0000")
     .replace(/--action_color:\s*[^;]+/, "--action_color: var(--solarized-blue)")
-    .replace(/--text_max_width:\s*[^;]+/, "--text_max_width: 45rem");
+    .replace(/--text_max_width:\s*[^;]+/, "--text_max_width: 45rem")
+    .replace(/--background-secondary:\s*[^;]+/, "--background-secondary: #112233")
+    .replace(/--dropdown-background:\s*[^;]+/, "--dropdown-background: #445566")
+    .replace(/--background-modifier-form-field:\s*[^;]+/, "--background-modifier-form-field: #778899")
+    .replace(/--input-border-color:\s*[^;]+/, "--input-border-color: var(--solarized-blue)");
   writeFileSync(join(root, "palette.css"), edited);
   build(root);
   const output = readFileSync(join(root, "theme.css"), "utf8");
@@ -86,18 +90,51 @@ test("CSS palette changes inject column width and update derived RGB and HSL cha
   assert.match(output, /--accent-l: 50%;/);
   assert.match(output, /--interactive-accent-rgb: 255, 0, 0;/);
   assert.match(output, /--color-orange-rgb: 203, 75, 22;/);
+  assert.match(output, /--input-border-color: rgb\(255, 0, 0\);/);
+  assert.match(output, /--dropdown-border-color: rgb\(255, 0, 0\);/);
   const generated = compilePalette(edited);
   assert.match(generated, /\.theme-light\.minimal-solarized-light \{[^}]*--bg1: var\(--base3\);[^}]*--tx1: var\(--base00\);/);
   assert.match(generated, /\.theme-dark\.minimal-solarized-dark \{[^}]*--bg1: var\(--base03\);[^}]*--tx1: var\(--base0\);/);
+});
+
+test("interface backgrounds invert Solarized neutral pairs only in dark mode", () => {
+  const backgrounds = ["background-secondary", "dropdown-background", "background-modifier-form-field", "input-border-color", "dropdown-border-color", "dropdown-border-color-hover"];
+  const pairs = [
+    ["base3", "#fdf6e3", "base03", "#002b36"],
+    ["base2", "#eee8d5", "base02", "#073642"],
+    ["base1", "#93a1a1", "base01", "#586e75"],
+    ["base0", "#839496", "base00", "#657b83"],
+  ];
+  let source = palette;
+  for (const [a, hexA, b, hexB] of pairs) {
+    for (const [tone, hex] of [[a, hexA], [b, hexB]]) {
+      source = source.replace(new RegExp(`--solarized-${tone}:\\s*#[a-f\\d]{6}`, "gi"), `--solarized-${tone}: ${hex}`);
+    }
+  }
+  const cases = pairs.flatMap(([a, hexA, b, hexB]) => [
+    [`var(--solarized-${a})`, hexA, hexB], [`var(--solarized-${b})`, hexB, hexA],
+  ]).concat([["var(--solarized-orange)", "#cb4b16", "#cb4b16"], ["#123456", "#123456", "#123456"]]);
+  for (const [value, light, dark] of cases) {
+    let edited = source;
+    for (const name of backgrounds) edited = edited.replace(new RegExp(`--${name}:[^;]+;`), `--${name}: ${value};`);
+    const output = compilePalette(edited);
+    for (const [mode, hex] of [["light", light], ["dark", dark]]) {
+      const block = output.match(new RegExp(`\\.theme-${mode}\\.minimal-default-${mode},[^\\{]+\\{([^}]+)\\}`))![1];
+      const rgb = hex.slice(1).match(/../g)!.map(channel => parseInt(channel, 16)).join(", ");
+      for (const name of backgrounds) assert.ok(block.includes(`--${name}: rgb(${rgb});`), `${name}: ${value} in ${mode}`);
+    }
+  }
 });
 
 test("invalid or missing palette colors preserve the previous CSS", t => {
   const root = fixture(t);
   const before = readFileSync(join(root, "theme.css"), "utf8");
   for (const edited of [
-    palette.replace("#268bd2", "#invalid"),
+    palette.replaceAll("#268bd2", "#invalid"),
     palette.replace(/--link_color:[^;]+;/, ""),
-    palette.replace("#cb4b16", "#invalid"),
+    palette.replaceAll("#cb4b16", "#invalid"),
+    palette.replace(/--dropdown-background:[^;]+;/, "--dropdown-background: #invalid;"),
+    palette.replace(/--dropdown-background:[^;]+;/, ""),
     palette + "\n:root { --link_color: #ffffff; }",
     palette.replace("var(--solarized-blue)", "var(--missing_color)"),
     palette.replace("var(--solarized-blue)", "var(--link_color)"),
@@ -137,7 +174,7 @@ test("build refuses an unsupported Obsidian minimum without replacing CSS", t =>
 test("update installs a newer release by immutable commit and preserves the theme version", async t => {
   const root = fixture(t);
   olderCopy(root);
-  const localPalette = palette.replace("#268bd2", "#ff0000");
+  const localPalette = palette.replaceAll("#268bd2", "#ff0000");
   writeFileSync(join(root, "palette.css"), localPalette);
   const calls: string[] = [];
   assert.match(await update(root, requester(responses(), calls)), /0\.0\.1 ->/);
@@ -220,7 +257,7 @@ test("dev watch rebuilds after CSS palette and TypeScript changes", { timeout: 1
       if (!line.includes("theme.css reconstruit")) continue;
       builds++;
       if (builds === 1) {
-        writeFileSync(join(root, "palette.css"), palette.replace("#268bd2", "#278bd2"));
+        writeFileSync(join(root, "palette.css"), palette.replaceAll("#268bd2", "#278bd2"));
       } else if (builds === 2) {
         assert.match(readFileSync(join(root, "theme.css"), "utf8"), /--color-blue-rgb: 39, 139, 210;/);
         const typography = join(root, "scripts/customize.ts");

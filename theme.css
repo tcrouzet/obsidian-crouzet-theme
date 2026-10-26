@@ -8776,8 +8776,14 @@ settings:
    Charts utilise toujours l'orange Solarized pour sa couleur 5 ; cyan Solarized reste disponible sans affectation par défaut.
    Les couleurs propres aux plugins et moteurs de coloration syntaxique peuvent rester indépendantes. */
 :root {
-  --screen_background: var(--solarized-base3);      /* Éditeur et lecture, explorateur, onglets gauches, ruban de commandes, champs et résultats de recherche ; texte des actions et notifications. */
-  --panel_background: var(--solarized-base2);       /* Menus, panneau droit, fonds secondaires et lignes alternées des tableaux ; en-têtes selon les options de Minimal. */
+  --screen_background: var(--solarized-base3);      /* Éditeur et lecture, explorateur, onglets gauches, ruban de commandes et résultats de recherche ; texte des actions et notifications. */
+  --panel_background: var(--solarized-base2);       /* Fonds alternatifs de l’éditeur, lignes alternées des tableaux et surfaces utilisant --bg2. */
+  --background-secondary: var(--solarized-base2);             /* Fond des cadres / boîtes des réglages. */
+  --dropdown-background: var(--solarized-base3);               /* Fond des listes déroulantes. */
+  --background-modifier-form-field: var(--solarized-base3);    /* Fond des champs de saisie. */
+  --input-border-color: var(--solarized-base2);                /* Bordure des champs de saisie. */
+  --dropdown-border-color: var(--input-border-color);          /* Bordure des listes déroulantes, identique à celle des champs. */
+  --dropdown-border-color-hover: var(--solarized-base0);       /* Bordure des listes déroulantes au survol. */
   --text_color: var(--solarized-base00);            /* Texte principal des notes et de l'interface, gras/italique, code non coloré, fichiers et onglets actifs. */
   --muted_text: var(--solarized-base01);            /* Descriptions, libellés secondaires, icônes au repos, arborescence et citations. */
   --faint_text: var(--solarized-base1);             /* Texte discret, marqueurs de listes, signes Markdown et bordures de focus. */
@@ -8849,6 +8855,12 @@ settings:
   --bg1: var(--base3);
   --bg2: var(--base2);
   --bg3: rgba(var(--color-blue-rgb), 0.06);
+  --background-secondary: rgb(238, 232, 213);
+  --dropdown-background: rgb(253, 246, 227);
+  --background-modifier-form-field: rgb(253, 246, 227);
+  --input-border-color: rgb(238, 232, 213);
+  --dropdown-border-color: rgb(238, 232, 213);
+  --dropdown-border-color-hover: rgb(131, 148, 150);
   --ui1: color-mix(in srgb, var(--base3) 88%, var(--base00));
   --ui2: color-mix(in srgb, var(--base3) 75%, var(--base00));
   --ui3: var(--base1);
@@ -8868,6 +8880,12 @@ settings:
   --bg1: var(--base03);
   --bg2: var(--base02);
   --bg3: rgba(var(--color-blue-rgb), 0.1);
+  --background-secondary: rgb(7, 54, 66);
+  --dropdown-background: rgb(0, 43, 54);
+  --background-modifier-form-field: rgb(0, 43, 54);
+  --input-border-color: rgb(7, 54, 66);
+  --dropdown-border-color: rgb(7, 54, 66);
+  --dropdown-border-color-hover: rgb(101, 123, 131);
   --ui1: color-mix(in srgb, var(--base03) 88%, var(--base0));
   --ui2: color-mix(in srgb, var(--base03) 75%, var(--base0));
   --ui3: var(--base01);
@@ -8919,6 +8937,24 @@ body.theme-dark {
   --sidebar-markdown-font-size: min(16px, var(--font-text-size));
   --tag-color: var(--tag_color);
   --tag-color-hover: var(--tag_color);
+}
+
+:where(input, textarea, select, .dropdown, .combobox-button, .multi-select-container) {
+  --background-modifier-border: var(--input-border-color);
+}
+
+select,
+.dropdown,
+.combobox-button {
+  border: var(--input-border-width) solid var(--dropdown-border-color);
+}
+
+@media (hover: hover) {
+  select:hover,
+  .dropdown:hover,
+  .combobox-button:hover {
+    border-color: var(--dropdown-border-color-hover);
+  }
 }
 
 .metadata-container {
