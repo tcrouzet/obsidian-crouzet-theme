@@ -1,14 +1,13 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { once } from "node:events";
-import { cpSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createInterface } from "node:readline";
 import { test } from "node:test";
 import type { TestContext } from "node:test";
-import { transformSync } from "esbuild";
-import { build, compareVersions, render, renderLicenses, ROOT } from "./build.ts";
+import { build, compareVersions, render, ROOT } from "./build.ts";
 import { compilePalette } from "./palette.ts";
 import { update } from "./update.ts";
 
@@ -17,18 +16,12 @@ const css = readFileSync(join(ROOT, "scripts/minimal/theme.css"), "utf8");
 const license = readFileSync(join(ROOT, "scripts/minimal/LICENSE"), "utf8");
 const manifest = JSON.parse(readFileSync(join(ROOT, "manifest.json"), "utf8"));
 const palette = readFileSync(join(ROOT, "palette.css"), "utf8");
-const ownLicense = readFileSync(join(ROOT, "LICENSE"), "utf8");
-
-function minified(css: string): string {
-  return transformSync(css, { loader: "css", minifyWhitespace: true, legalComments: "none" }).code.trimEnd();
-}
 
 function fixture(t: TestContext): string {
   const root = mkdtempSync(join(tmpdir(), "crouzet build check "));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   cpSync(join(ROOT, "scripts"), join(root, "scripts"), { recursive: true });
-  for (const file of ["manifest.json", "package.json", "palette.css", "theme.css", "LICENSE", "LICENSES.txt"]) cpSync(join(ROOT, file), join(root, file));
-  symlinkSync(join(ROOT, "node_modules"), join(root, "node_modules"), "dir");
+  for (const file of ["manifest.json", "package.json", "palette.css", "theme.css"]) cpSync(join(ROOT, file), join(root, file));
   return root;
 }
 
@@ -60,121 +53,51 @@ function olderCopy(root: string): void {
   writeFileSync(join(root, "manifest.json"), JSON.stringify({ ...manifest, minAppVersion: "0.0.1" }));
 }
 
-const outputs = ["theme.css", "LICENSES.txt", "palette.css", "manifest.json", "scripts/minimal/theme.css", "scripts/minimal/version.json", "scripts/minimal/LICENSE"];
+const outputs = ["theme.css", "palette.css", "manifest.json", "scripts/minimal/theme.css", "scripts/minimal/version.json", "scripts/minimal/LICENSE"];
 function snapshot(root: string): string[] {
   return outputs.map(file => readFileSync(join(root, file), "utf8"));
 }
 
-test("root CSS is reproducible and retains all pinned Minimal rules after minification", () => {
+test("root CSS is reproducible and retains the entire pinned Minimal stylesheet", () => {
   const output = render(css, minimal, palette);
   assert.equal(output, readFileSync(join(ROOT, "theme.css"), "utf8"));
-  assert.ok(output.startsWith(minified(css)));
-  assert.ok(output.includes(minified(palette)));
-  assert.ok(!output.includes("/*"));
-  assert.equal(output.trimEnd().split("\n").length, 1);
+  assert.ok(output.startsWith(css));
+  assert.ok(output.includes(palette));
   assert.match(output, /--font-text-theme: Menlo, Consolas, "DejaVu Sans Mono", monospace/);
   assert.match(output, /--font-text-size: 23px/);
   assert.match(output, /--caret-color: var\(--text-title\)/);
   assert.match(output, /--active-line-bg: transparent/);
 });
 
-test("licenses retain upstream copyright notices outside the CSS", () => {
-  const notices = renderLicenses("/* Ordinary documentation. */\n/* Copyright (c) Example Author */\n/* Copyright (c) Example Author */", license, ownLicense);
-  assert.ok(notices.includes(license.trim()));
-  assert.ok(notices.includes(ownLicense.trim()));
-  assert.ok(notices.includes("Copyright (c) Example Author"));
-  assert.equal(notices.split("Copyright (c) Example Author").length, 2);
-  assert.ok(!notices.includes("Ordinary documentation"));
-  const built = readFileSync(join(ROOT, "LICENSES.txt"), "utf8");
-  assert.equal(built, renderLicenses(css, license, ownLicense));
-  assert.ok(built.includes("Steph Ango"));
-  assert.ok(built.includes("Catppuccin"));
-});
-
-test("render removes comments without changing quoted text, data URLs or calc expressions", () => {
-  const extra = `
-/* remove this ordinary comment */
-/*! remove this legal comment */
-.minify-check::before {
-  content: "/* literal text */";
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E");
-  width: calc(100% - 2px);
-}`;
-  const output = render(css, minimal, palette + extra);
-  assert.ok(!output.includes("remove this ordinary comment"));
-  assert.ok(!output.includes("remove this legal comment"));
-  assert.ok(!output.includes("@settings"));
-  assert.ok(output.includes('"/* literal text */"'));
-  assert.ok(output.includes("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E"));
-  assert.ok(output.includes("calc(100% - 2px)"));
-});
-
-test("CSS palette changes inject column width, interface backgrounds and derived color channels", t => {
+test("CSS palette changes inject column width and update derived RGB and HSL channels", t => {
   const root = fixture(t);
-  const edited = palette.replaceAll("#268bd2", "#ff0000")
+  const edited = palette.replace("#268bd2", "#ff0000")
     .replace(/--action_color:\s*[^;]+/, "--action_color: var(--solarized-blue)")
-    .replace(/--text_max_width:\s*[^;]+/, "--text_max_width: 45rem")
-    .replace(/--background-secondary:\s*[^;]+/, "--background-secondary: #112233")
-    .replace(/--dropdown-background:\s*[^;]+/, "--dropdown-background: #445566")
-    .replace(/--background-modifier-form-field:\s*[^;]+/, "--background-modifier-form-field: #778899")
-    .replace(/--input-border-color:\s*[^;]+/, "--input-border-color: var(--solarized-blue)");
+    .replace(/--text_max_width:\s*[^;]+/, "--text_max_width: 45rem");
   writeFileSync(join(root, "palette.css"), edited);
   build(root);
   const output = readFileSync(join(root, "theme.css"), "utf8");
-  assert.ok(output.includes(minified(edited)));
-  assert.match(output, /--text_max_width: 45rem(?:;|})/);
-  assert.match(output, /--line-width: var\(--text_max_width\)(?:;|})/);
+  assert.ok(output.includes(edited));
+  assert.match(output, /--text_max_width: 45rem;/);
+  assert.match(output, /--line-width: var\(--text_max_width\);/);
   assert.match(output, /--color-blue-rgb: 255, 0, 0;/);
   assert.match(output, /--accent-h: 0;/);
   assert.match(output, /--accent-s: 100%;/);
   assert.match(output, /--accent-l: 50%;/);
-  assert.match(output, /--interactive-accent-rgb: 255, 0, 0(?:;|})/);
+  assert.match(output, /--interactive-accent-rgb: 255, 0, 0;/);
   assert.match(output, /--color-orange-rgb: 203, 75, 22;/);
-  assert.match(output, /--input-border-color: rgb\(255, 0, 0\);/);
-  assert.match(output, /--dropdown-border-color: rgb\(255, 0, 0\);/);
   const generated = compilePalette(edited);
   assert.match(generated, /\.theme-light\.minimal-solarized-light \{[^}]*--bg1: var\(--base3\);[^}]*--tx1: var\(--base00\);/);
   assert.match(generated, /\.theme-dark\.minimal-solarized-dark \{[^}]*--bg1: var\(--base03\);[^}]*--tx1: var\(--base0\);/);
-});
-
-test("interface backgrounds invert Solarized neutral pairs only in dark mode", () => {
-  const backgrounds = ["background-secondary", "dropdown-background", "background-modifier-form-field", "input-border-color", "dropdown-border-color", "dropdown-border-color-hover"];
-  const pairs = [
-    ["base3", "#fdf6e3", "base03", "#002b36"],
-    ["base2", "#eee8d5", "base02", "#073642"],
-    ["base1", "#93a1a1", "base01", "#586e75"],
-    ["base0", "#839496", "base00", "#657b83"],
-  ];
-  let source = palette;
-  for (const [a, hexA, b, hexB] of pairs) {
-    for (const [tone, hex] of [[a, hexA], [b, hexB]]) {
-      source = source.replace(new RegExp(`--solarized-${tone}:\\s*#[a-f\\d]{6}`, "gi"), `--solarized-${tone}: ${hex}`);
-    }
-  }
-  const cases = pairs.flatMap(([a, hexA, b, hexB]) => [
-    [`var(--solarized-${a})`, hexA, hexB], [`var(--solarized-${b})`, hexB, hexA],
-  ]).concat([["var(--solarized-orange)", "#cb4b16", "#cb4b16"], ["#123456", "#123456", "#123456"]]);
-  for (const [value, light, dark] of cases) {
-    let edited = source;
-    for (const name of backgrounds) edited = edited.replace(new RegExp(`--${name}:[^;]+;`), `--${name}: ${value};`);
-    const output = compilePalette(edited);
-    for (const [mode, hex] of [["light", light], ["dark", dark]]) {
-      const block = output.match(new RegExp(`\\.theme-${mode}\\.minimal-default-${mode},[^\\{]+\\{([^}]+)\\}`))![1];
-      const rgb = hex.slice(1).match(/../g)!.map(channel => parseInt(channel, 16)).join(", ");
-      for (const name of backgrounds) assert.ok(block.includes(`--${name}: rgb(${rgb});`), `${name}: ${value} in ${mode}`);
-    }
-  }
 });
 
 test("invalid or missing palette colors preserve the previous CSS", t => {
   const root = fixture(t);
   const before = readFileSync(join(root, "theme.css"), "utf8");
   for (const edited of [
-    palette.replaceAll("#268bd2", "#invalid"),
+    palette.replace("#268bd2", "#invalid"),
     palette.replace(/--link_color:[^;]+;/, ""),
-    palette.replaceAll("#cb4b16", "#invalid"),
-    palette.replace(/--dropdown-background:[^;]+;/, "--dropdown-background: #invalid;"),
-    palette.replace(/--dropdown-background:[^;]+;/, ""),
+    palette.replace("#cb4b16", "#invalid"),
     palette + "\n:root { --link_color: #ffffff; }",
     palette.replace("var(--solarized-blue)", "var(--missing_color)"),
     palette.replace("var(--solarized-blue)", "var(--link_color)"),
@@ -183,14 +106,6 @@ test("invalid or missing palette colors preserve the previous CSS", t => {
     assert.throws(() => build(root), /Palette/);
     assert.equal(readFileSync(join(root, "theme.css"), "utf8"), before);
   }
-});
-
-test("a CSS minification warning preserves the previous stylesheet and licenses", t => {
-  const root = fixture(t);
-  const previous = ["theme.css", "LICENSES.txt"].map(name => readFileSync(join(root, name), "utf8"));
-  writeFileSync(join(root, "palette.css"), palette + "\na { color red; }\n");
-  assert.throws(() => build(root), /CSS/);
-  assert.deepEqual(["theme.css", "LICENSES.txt"].map(name => readFileSync(join(root, name), "utf8")), previous);
 });
 
 test("numeric versions order correctly and reject invalid tags", () => {
@@ -222,17 +137,14 @@ test("build refuses an unsupported Obsidian minimum without replacing CSS", t =>
 test("update installs a newer release by immutable commit and preserves the theme version", async t => {
   const root = fixture(t);
   olderCopy(root);
-  const localPalette = palette.replaceAll("#268bd2", "#ff0000");
+  const localPalette = palette.replace("#268bd2", "#ff0000");
   writeFileSync(join(root, "palette.css"), localPalette);
   const calls: string[] = [];
-  const replies = responses();
-  replies.set(`${raw}/LICENSE`, license + "\nCopyright (c) Updated upstream notice\n");
-  assert.match(await update(root, requester(replies, calls)), /0\.0\.1 ->/);
+  assert.match(await update(root, requester(responses(), calls)), /0\.0\.1 ->/);
   assert.deepEqual(calls, [...responses().keys()]);
   assert.deepEqual(JSON.parse(readFileSync(join(root, "scripts/minimal/version.json"), "utf8")), minimal);
   assert.equal(readFileSync(join(root, "theme.css"), "utf8"), render(css, minimal, localPalette));
   assert.equal(readFileSync(join(root, "palette.css"), "utf8"), localPalette);
-  assert.ok(readFileSync(join(root, "LICENSES.txt"), "utf8").includes("Updated upstream notice"));
   const updated = JSON.parse(readFileSync(join(root, "manifest.json"), "utf8"));
   assert.equal(updated.minAppVersion, minimal.minAppVersion);
   assert.equal(updated.version, manifest.version);
@@ -308,7 +220,7 @@ test("dev watch rebuilds after CSS palette and TypeScript changes", { timeout: 1
       if (!line.includes("theme.css reconstruit")) continue;
       builds++;
       if (builds === 1) {
-        writeFileSync(join(root, "palette.css"), palette.replaceAll("#268bd2", "#278bd2"));
+        writeFileSync(join(root, "palette.css"), palette.replace("#268bd2", "#278bd2"));
       } else if (builds === 2) {
         assert.match(readFileSync(join(root, "theme.css"), "utf8"), /--color-blue-rgb: 39, 139, 210;/);
         const typography = join(root, "scripts/customize.ts");

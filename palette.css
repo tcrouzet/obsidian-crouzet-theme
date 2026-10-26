@@ -24,14 +24,8 @@
    Charts utilise toujours l'orange Solarized pour sa couleur 5 ; cyan Solarized reste disponible sans affectation par défaut.
    Les couleurs propres aux plugins et moteurs de coloration syntaxique peuvent rester indépendantes. */
 :root {
-  --screen_background: var(--solarized-base3);      /* Éditeur et lecture, explorateur, onglets gauches, ruban de commandes et résultats de recherche ; texte des actions et notifications. */
-  --panel_background: var(--solarized-base2);       /* Fonds alternatifs de l’éditeur, lignes alternées des tableaux et surfaces utilisant --bg2. */
-  --background-secondary: var(--solarized-base2);             /* Fond des cadres / boîtes des réglages. */
-  --dropdown-background: var(--solarized-base3);               /* Fond des listes déroulantes. */
-  --background-modifier-form-field: var(--solarized-base3);    /* Fond des champs de saisie. */
-  --input-border-color: var(--solarized-base2);                /* Bordure des champs de saisie. */
-  --dropdown-border-color: var(--input-border-color);          /* Bordure des listes déroulantes, identique à celle des champs. */
-  --dropdown-border-color-hover: var(--solarized-base0);       /* Bordure des listes déroulantes au survol. */
+  --screen_background: var(--solarized-base3);      /* Éditeur et lecture, explorateur, onglets gauches, ruban de commandes, champs et résultats de recherche ; texte des actions et notifications. */
+  --panel_background: var(--solarized-base2);       /* Menus, panneau droit, fonds secondaires et lignes alternées des tableaux ; en-têtes selon les options de Minimal. */
   --text_color: var(--solarized-base00);            /* Texte principal des notes et de l'interface, gras/italique, code non coloré, fichiers et onglets actifs. */
   --muted_text: var(--solarized-base01);            /* Descriptions, libellés secondaires, icônes au repos, arborescence et citations. */
   --faint_text: var(--solarized-base1);             /* Texte discret, marqueurs de listes, signes Markdown et bordures de focus. */

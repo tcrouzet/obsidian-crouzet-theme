@@ -2,7 +2,6 @@ import { createHash, randomUUID } from "node:crypto";
 import { readFileSync, renameSync, rmSync, watchFile, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { transformSync } from "esbuild";
 import { customize } from "./customize.ts";
 import { compilePalette } from "./palette.ts";
 
@@ -29,18 +28,7 @@ export function render(css: string, minimal: Minimal, palette: string): string {
     if (!css.includes(token)) throw new Error(`Minimal incompatible : ${token} absent`);
   }
   if (css.includes("\0") || /^\s*</.test(css)) throw new Error("CSS Minimal invalide");
-  const result = transformSync(`${css}\n${compilePalette(palette)}\n${customize()}`, {
-    loader: "css", minifyWhitespace: true, legalComments: "none",
-  });
-  if (result.warnings.length) throw new Error(`CSS : ${result.warnings.map(warning => warning.text).join("; ")}`);
-  return result.code;
-}
-
-export function renderLicenses(css: string, upstream: string, own: string): string {
-  const notices = [...css.matchAll(/\/\*[\s\S]*?\*\//g)]
-    .map(([comment]) => comment.slice(2, -2).trim())
-    .filter(comment => /copyright|license/i.test(comment));
-  return [...new Set([own.trim(), upstream.trim(), ...notices])].join("\n\n") + "\n";
+  return `${css}\n/* Minimal ${minimal.version}, commit ${minimal.commit} */\n${compilePalette(palette)}\n${customize()}`;
 }
 
 // A failed build must leave the stylesheet Obsidian is reading intact.
@@ -60,12 +48,8 @@ export function build(root = ROOT): string {
   if (compareVersions(manifest.minAppVersion, minimal.minAppVersion) < 0) {
     throw new Error(`Minimal exige Obsidian ${minimal.minAppVersion}`);
   }
-  const css = readFileSync(join(root, "scripts/minimal/theme.css"), "utf8");
-  const output = render(css, minimal,
+  const output = render(readFileSync(join(root, "scripts/minimal/theme.css"), "utf8"), minimal,
     readFileSync(join(root, "palette.css"), "utf8"));
-  const licenses = renderLicenses(css, readFileSync(join(root, "scripts/minimal/LICENSE"), "utf8"),
-    readFileSync(join(root, "LICENSE"), "utf8"));
-  writeAtomic(join(root, "LICENSES.txt"), licenses);
   writeAtomic(join(root, "theme.css"), output);
   return minimal.version;
 }

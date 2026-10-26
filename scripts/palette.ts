@@ -15,13 +15,11 @@ export function compilePalette(css: string): string {
     if (definitions.has(name)) throw new Error(`Palette : --${name} defini plusieurs fois`);
     definitions.set(name, value.trim());
   }
-  function resolve(name: string, path: string[] = [], dark = false): number[] {
+  function resolve(name: string, path: string[] = []): number[] {
     if (path.includes(name)) throw new Error(`Palette : reference circulaire --${name}`);
-    const swatch = dark ? name.replace(/^solarized-base(0?[0-3])$/, (_, tone: string) =>
-      `solarized-base${tone.length === 2 ? tone.slice(1) : `0${tone}`}`) : name;
-    const value = definitions.get(swatch) ?? "";
+    const value = definitions.get(name) ?? "";
     const reference = value.match(/^var\(--([\w-]+)\)$/);
-    if (reference) return resolve(reference[1], [...path, name], dark);
+    if (reference) return resolve(reference[1], [...path, name]);
     if (!/^#[a-f\d]{6}$/i.test(value)) throw new Error(`Palette : --${name} doit avoir une couleur #RRGGBB ou une reference var() valide`);
     return value.slice(1).match(/../g)!.map(channel => parseInt(channel, 16));
   }
@@ -68,8 +66,6 @@ ${hsl(colors.get(names[background])!, "base")}
   --bg1: var(--${background});
   --bg2: var(--${panel});
   --bg3: rgba(var(--color-blue-rgb), ${hover});
-${["background-secondary", "dropdown-background", "background-modifier-form-field", "input-border-color", "dropdown-border-color", "dropdown-border-color-hover"].map(name =>
-  `  --${name}: rgb(${resolve(name, [], mode === "dark").join(", ")});`).join("\n")}
   --ui1: color-mix(in srgb, var(--${background}) 88%, var(--${text}));
   --ui2: color-mix(in srgb, var(--${background}) 75%, var(--${text}));
   --ui3: var(--${faint});

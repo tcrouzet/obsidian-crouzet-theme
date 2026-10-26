@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { chmodSync, cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { chmodSync, cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { delimiter, join } from "node:path";
 import { test } from "node:test";
@@ -36,8 +36,7 @@ function fixture(t: TestContext): string {
   const root = mkdtempSync(join(tmpdir(), "crouzet release check "));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   cpSync(join(ROOT, "scripts"), join(root, "scripts"), { recursive: true });
-  for (const file of ["release.sh", "theme.css", "package.json", "palette.css", "LICENSE", "LICENSES.txt"]) cpSync(join(ROOT, file), join(root, file));
-  symlinkSync(join(ROOT, "node_modules"), join(root, "node_modules"), "dir");
+  for (const file of ["release.sh", "theme.css", "package.json", "palette.css"]) cpSync(join(ROOT, file), join(root, file));
   mkdirSync(join(root, "bin"));
   for (const tool of ["git", "gh"]) {
     writeFileSync(join(root, "bin", tool), driver);

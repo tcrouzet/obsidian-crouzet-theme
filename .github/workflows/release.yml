@@ -25,9 +25,6 @@ jobs:
         with:
           node-version: '24.12.0'
 
-      - name: Install build dependencies
-        run: npm ci --ignore-scripts
-
       - name: Validate and build
         env:
           RELEASE_TAG: ${{ github.ref_name }}
@@ -52,7 +49,6 @@ jobs:
           subject-path: |
             theme.css
             manifest.json
-            LICENSES.txt
 
       - name: Publish theme
         env:
@@ -61,5 +57,5 @@ jobs:
           GH_REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
-          gh release create "$RELEASE_TAG" theme.css manifest.json LICENSES.txt \
+          gh release create "$RELEASE_TAG" theme.css manifest.json \
             --verify-tag --title "$RELEASE_TAG" --notes "Release $RELEASE_TAG"

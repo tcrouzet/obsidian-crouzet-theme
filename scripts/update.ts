@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { build, compareVersions, render, renderLicenses, ROOT, sha256, VERSION, writeAtomic } from "./build.ts";
+import { build, compareVersions, render, ROOT, sha256, VERSION, writeAtomic } from "./build.ts";
 import type { Minimal } from "./build.ts";
 
 const API = "https://api.github.com/repos/kepano/obsidian-minimal";
@@ -40,7 +40,6 @@ export async function update(root = ROOT, request: typeof fetch = fetch): Promis
   if (!license.includes("MIT License") || !license.includes("Steph Ango")) throw new Error("Licence Minimal invalide");
   const minimal: Minimal = { version, commit, sha256: sha256(css), minAppVersion: upstream.minAppVersion };
   const output = render(css, minimal, readFileSync(join(root, "palette.css"), "utf8"));
-  const licenses = renderLicenses(css, license, readFileSync(join(root, "LICENSE"), "utf8"));
   const manifest = JSON.parse(readFileSync(join(root, "manifest.json"), "utf8"));
   if (compareVersions(manifest.minAppVersion, minimal.minAppVersion) < 0) {
     manifest.minAppVersion = minimal.minAppVersion;
@@ -50,7 +49,6 @@ export async function update(root = ROOT, request: typeof fetch = fetch): Promis
   writeAtomic(join(directory, "theme.css"), css);
   writeAtomic(join(directory, "LICENSE"), license);
   writeAtomic(join(root, "manifest.json"), JSON.stringify(manifest, null, 2) + "\n");
-  writeAtomic(join(root, "LICENSES.txt"), licenses);
   writeAtomic(join(root, "theme.css"), output);
   writeAtomic(join(directory, "version.json"), JSON.stringify(minimal, null, 2) + "\n");
   return `Minimal ${previous.version} -> ${version} : theme.css reconstruit`;
