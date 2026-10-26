@@ -37,6 +37,7 @@ export function customize(): string {
 
 body.theme-light,
 body.theme-dark {
+  --sidebar-markdown-font-size: min(16px, var(--font-text-size));
   --tag-color: var(--tag_color);
   --tag-color-hover: var(--tag_color);
 }
@@ -65,6 +66,13 @@ body.theme-dark {
 
 .mod-warning {
   --text-on-accent: var(--base3);
+}
+
+.workspace-split.mod-left-split,
+.workspace-split.mod-right-split {
+  --font-text-size: var(--sidebar-markdown-font-size);
+  --font-adaptive-normal: var(--font-text-size);
+  font-size: var(--font-text-size);
 }
 
 .workspace-split.mod-left-split {
