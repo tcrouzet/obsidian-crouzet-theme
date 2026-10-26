@@ -24,14 +24,18 @@
    Charts utilise toujours l'orange Solarized pour sa couleur 5 ; cyan Solarized reste disponible sans affectation par défaut.
    Les couleurs propres aux plugins et moteurs de coloration syntaxique peuvent rester indépendantes. */
 :root {
-  --screen_background: var(--solarized-base3);      /* Éditeur et lecture, explorateur, onglets gauches, ruban de commandes, champs et résultats de recherche ; texte des actions et notifications. */
-  --panel_background: var(--solarized-base2);       /* Menus, panneau droit, fonds secondaires et lignes alternées des tableaux ; en-têtes selon les options de Minimal. */
+  --screen_background: var(--solarized-base3);      /* Éditeur et lecture, panneaux latéraux gauche et droit, onglets, ruban de commandes ; texte des actions et notifications. */
+  --panel_background: var(--solarized-base2);       /* Menus, fonds secondaires et lignes alternées des tableaux. */
+  --background-modifier-form-field: var(--solarized-base3); /* Fond des champs de saisie. */
+  --dropdown-background: var(--solarized-base3);    /* Fond des listes déroulantes. */
+  --input-border-color: var(--solarized-base1);     /* Contours des champs et filets de séparation des onglets des réglages. */
+  --input-border-color-hover: var(--solarized-base0); /* Contours des champs au survol. */
+  --dropdown-border-color: var(--input-border-color); /* Contours des listes déroulantes. */
+  --dropdown-border-color-hover: var(--input-border-color-hover); /* Contours des listes au survol. */
   --text_color: var(--solarized-base00);            /* Texte principal des notes et de l'interface, gras/italique, code non coloré, fichiers et onglets actifs. */
   --muted_text: var(--solarized-base01);            /* Descriptions, libellés secondaires, icônes au repos, arborescence et citations. */
-  --faint_text: var(--solarized-base1);             /* Texte discret, marqueurs de listes, signes Markdown et bordures de focus. */
-  --inverse_text: var(--solarized-base0);           /* Équivalent sombre du texte principal : notes, interface, code non coloré et éléments actifs. */
-  --inverse_background: var(--solarized-base03);    /* Fond sombre de l'éditeur, explorateur et ruban ; fond des notifications dans les deux modes. */
-  --inverse_panel: var(--solarized-base02);         /* Équivalent sombre des menus, panneau droit, fonds secondaires et lignes alternées des tableaux. */
+  --faint_text: var(--solarized-base1);             /* Texte discret, marqueurs de listes, signes Markdown et contours de focus. */
+  --inverse_background: var(--solarized-base03);    /* Fond des notifications dans les deux modes ; les autres fonds sombres sont calculés par inversion. */
   --link_color: var(--solarized-blue);              /* Liens internes et des réglages, sélection/survol en transparence, boutons d'action survolés ; couleur 1 de Charts. */
   --heading_color: var(--solarized-blue);           /* Titres H1-H6 et titre de note, curseur, liens survolés et variations de l'accent ; couleur 7 de Charts. */
   --external_link_color: var(--solarized-blue);     /* Liens externes en édition et lecture ; couleur 6 de Charts. */

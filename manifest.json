@@ -1,8 +1,7 @@
 {
   "name": "CrouzetTheme",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "minAppVersion": "1.14.0",
-  "description": "Minimal solarized theme with a zest of Crouzet.",
   "author": "Thierry Crouzet",
   "authorUrl": "https://tcrouzet.com",
   "fundingUrl": "https://www.paypal.com/donate/?business=MCZTJGYPGXXCW&no_recurring=0&currency_code=EUR"

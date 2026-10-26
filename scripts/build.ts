@@ -1,4 +1,4 @@
-import { createHash, randomUUID } from "node:crypto";
+import { randomUUID } from "node:crypto";
 import { readFileSync, renameSync, rmSync, watchFile, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -7,28 +7,8 @@ import { compilePalette } from "./palette.ts";
 
 export const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
 export const VERSION = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
-export type Minimal = { version: string; commit: string; sha256: string; minAppVersion: string };
-
-export function sha256(css: string): string {
-  return createHash("sha256").update(css).digest("hex");
-}
-
-export function compareVersions(left: string, right: string): number {
-  if (!VERSION.test(left) || !VERSION.test(right)) throw new Error("Version invalide");
-  const a = left.split(".").map(BigInt), b = right.split(".").map(BigInt);
-  for (let i = 0; i < 3; i++) if (a[i] !== b[i]) return a[i] > b[i] ? 1 : -1;
-  return 0;
-}
-
-export function render(css: string, minimal: Minimal, palette: string): string {
-  if (!VERSION.test(minimal.version) || !VERSION.test(minimal.minAppVersion)
-      || !/^[a-f0-9]{40}$/.test(minimal.commit)
-      || sha256(css) !== minimal.sha256) throw new Error("Copie Minimal invalide ou empreinte incorrecte");
-  for (const token of [".theme-light", ".theme-dark", "--bg1:", "--ui1:", "--tx1:", "--ax1:"]) {
-    if (!css.includes(token)) throw new Error(`Minimal incompatible : ${token} absent`);
-  }
-  if (css.includes("\0") || /^\s*</.test(css)) throw new Error("CSS Minimal invalide");
-  return `${css}\n/* Minimal ${minimal.version}, commit ${minimal.commit} */\n${compilePalette(palette)}\n${customize()}`;
+export function render(palette: string): string {
+  return `/* CrouzetTheme. MIT License; see LICENSE. */\n${compilePalette(palette)}\n${customize()}`;
 }
 
 // A failed build must leave the stylesheet Obsidian is reading intact.
@@ -42,22 +22,20 @@ export function writeAtomic(path: string, content: string): void {
   }
 }
 
-export function build(root = ROOT): string {
-  const minimal: Minimal = JSON.parse(readFileSync(join(root, "scripts/minimal/version.json"), "utf8"));
+export function build(root = ROOT): void {
   const manifest = JSON.parse(readFileSync(join(root, "manifest.json"), "utf8"));
-  if (compareVersions(manifest.minAppVersion, minimal.minAppVersion) < 0) {
-    throw new Error(`Minimal exige Obsidian ${minimal.minAppVersion}`);
+  if (!VERSION.test(manifest.version) || !VERSION.test(manifest.minAppVersion)) {
+    throw new Error("Manifeste : version invalide");
   }
-  const output = render(readFileSync(join(root, "scripts/minimal/theme.css"), "utf8"), minimal,
-    readFileSync(join(root, "palette.css"), "utf8"));
+  const output = render(readFileSync(join(root, "palette.css"), "utf8"));
   writeAtomic(join(root, "theme.css"), output);
-  return minimal.version;
 }
 
 if (import.meta.main) {
   const rebuild = () => {
     try {
-      console.log(`theme.css reconstruit depuis Minimal ${build()}`);
+      build();
+      console.log("theme.css reconstruit");
       process.exitCode = 0;
     } catch (error) {
       console.error(error instanceof Error ? error.message : error);

@@ -103,7 +103,7 @@ test("invalid versions or non-default branch stop before commit", t => {
 
 test("a failed real build stops release before changing the manifest", t => {
   const root = fixture(t);
-  writeFileSync(join(root, "scripts/minimal/theme.css"), "corrupt source");
+  writeFileSync(join(root, "palette.css"), ":root { --solarized-blue: #invalid; }");
   const result = runCase(root);
   assert.notEqual(result.status, 0);
   assert.equal(result.version, "0.0.1");
