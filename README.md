@@ -6,7 +6,11 @@ Notes use Menlo at `23px` by default, falling back to Consolas or DejaVu Sans Mo
 
 ## Edit and build
 
-Requires Node.js ≥ 24.12.0 and npm. No package installation is needed: Node runs the TypeScript scripts directly.
+Requires Node.js ≥ 24.12.0 and npm. Node runs the TypeScript scripts directly. Install the pinned CSS minifier once:
+
+```bash
+npm ci --ignore-scripts
+```
 
 - [palette.css](palette.css): the complete Solarized swatches as `#RRGGBB` values, followed by theme colors assigned through `var()` references and comments explaining their use. Dark mode reverses the neutral tones automatically. The explorer shares the editor background, with a thin divider.
 - [scripts/palette.ts](scripts/palette.ts): maps the palette to Minimal's variables and calculates light/dark colors and RGB/HSL channels.
@@ -28,7 +32,9 @@ Rebuild automatically when `palette.css` or imported TypeScript files change; st
 npm run dev
 ```
 
-The build verifies the local Minimal copy, appends `palette.css` and the note defaults, then atomically replaces `theme.css`. It works offline and preserves the previous CSS if validation fails. Edit `palette.css` for colors and the TypeScript sources for build logic and note defaults; the root CSS is generated. Minimal's Style Settings sections remain available, and no interface or code font is imposed.
+The build verifies the local Minimal copy, appends `palette.css` and the note defaults, then minifies whitespace and removes all CSS comments with esbuild. It writes `LICENSES.txt` with the licenses and upstream notices, then atomically replaces `theme.css`. After dependencies are installed, builds work offline and preserve the previous CSS if validation fails. Edit `palette.css` for colors and the TypeScript sources for build logic and note defaults; these sources stay readable. No interface or code font is imposed.
+
+Minimal's Style Settings definitions are CSS comments and are omitted from the distributed stylesheet. The corresponding sections will not appear in the Style Settings plugin.
 
 ## Update Minimal
 
@@ -60,4 +66,4 @@ bash release.sh
 
 The script verifies the build, automatically increments the patch version in `manifest.json` (`0.0.1` → `0.0.2`), commits all current changes and pushes the branch, then creates and pushes the matching tag without a `v` prefix. A tag collision, rejected push, or mismatched remote manifest stops publication.
 
-[GitHub Actions](.github/workflows/release.yml) rebuilds the pinned theme with Node.js 24.12.0, runs the tests and verifies that the tag matches the manifest, attests the files, and publishes the release with `theme.css` and `manifest.json` attached. These are the files Obsidian installs.
+[GitHub Actions](.github/workflows/release.yml) installs the locked build dependencies, rebuilds the pinned theme with Node.js 24.12.0, runs the tests and verifies that the tag matches the manifest, attests the files, and publishes the release with `theme.css`, `manifest.json` and `LICENSES.txt` attached. Obsidian installs the CSS and manifest; the licenses accompany the release as a separate file.

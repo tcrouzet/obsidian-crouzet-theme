@@ -1,13 +1,14 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { once } from "node:events";
-import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createInterface } from "node:readline";
 import { test } from "node:test";
 import type { TestContext } from "node:test";
-import { build, compareVersions, render, ROOT } from "./build.ts";
+import { transformSync } from "esbuild";
+import { build, compareVersions, render, renderLicenses, ROOT } from "./build.ts";
 import { compilePalette } from "./palette.ts";
 import { update } from "./update.ts";
 
@@ -16,12 +17,18 @@ const css = readFileSync(join(ROOT, "scripts/minimal/theme.css"), "utf8");
 const license = readFileSync(join(ROOT, "scripts/minimal/LICENSE"), "utf8");
 const manifest = JSON.parse(readFileSync(join(ROOT, "manifest.json"), "utf8"));
 const palette = readFileSync(join(ROOT, "palette.css"), "utf8");
+const ownLicense = readFileSync(join(ROOT, "LICENSE"), "utf8");
+
+function minified(css: string): string {
+  return transformSync(css, { loader: "css", minifyWhitespace: true, legalComments: "none" }).code.trimEnd();
+}
 
 function fixture(t: TestContext): string {
   const root = mkdtempSync(join(tmpdir(), "crouzet build check "));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   cpSync(join(ROOT, "scripts"), join(root, "scripts"), { recursive: true });
-  for (const file of ["manifest.json", "package.json", "palette.css", "theme.css"]) cpSync(join(ROOT, file), join(root, file));
+  for (const file of ["manifest.json", "package.json", "palette.css", "theme.css", "LICENSE", "LICENSES.txt"]) cpSync(join(ROOT, file), join(root, file));
+  symlinkSync(join(ROOT, "node_modules"), join(root, "node_modules"), "dir");
   return root;
 }
 
@@ -53,20 +60,53 @@ function olderCopy(root: string): void {
   writeFileSync(join(root, "manifest.json"), JSON.stringify({ ...manifest, minAppVersion: "0.0.1" }));
 }
 
-const outputs = ["theme.css", "palette.css", "manifest.json", "scripts/minimal/theme.css", "scripts/minimal/version.json", "scripts/minimal/LICENSE"];
+const outputs = ["theme.css", "LICENSES.txt", "palette.css", "manifest.json", "scripts/minimal/theme.css", "scripts/minimal/version.json", "scripts/minimal/LICENSE"];
 function snapshot(root: string): string[] {
   return outputs.map(file => readFileSync(join(root, file), "utf8"));
 }
 
-test("root CSS is reproducible and retains the entire pinned Minimal stylesheet", () => {
+test("root CSS is reproducible and retains all pinned Minimal rules after minification", () => {
   const output = render(css, minimal, palette);
   assert.equal(output, readFileSync(join(ROOT, "theme.css"), "utf8"));
-  assert.ok(output.startsWith(css));
-  assert.ok(output.includes(palette));
+  assert.ok(output.startsWith(minified(css)));
+  assert.ok(output.includes(minified(palette)));
+  assert.ok(!output.includes("/*"));
+  assert.equal(output.trimEnd().split("\n").length, 1);
   assert.match(output, /--font-text-theme: Menlo, Consolas, "DejaVu Sans Mono", monospace/);
   assert.match(output, /--font-text-size: 23px/);
   assert.match(output, /--caret-color: var\(--text-title\)/);
   assert.match(output, /--active-line-bg: transparent/);
+});
+
+test("licenses retain upstream copyright notices outside the CSS", () => {
+  const notices = renderLicenses("/* Ordinary documentation. */\n/* Copyright (c) Example Author */\n/* Copyright (c) Example Author */", license, ownLicense);
+  assert.ok(notices.includes(license.trim()));
+  assert.ok(notices.includes(ownLicense.trim()));
+  assert.ok(notices.includes("Copyright (c) Example Author"));
+  assert.equal(notices.split("Copyright (c) Example Author").length, 2);
+  assert.ok(!notices.includes("Ordinary documentation"));
+  const built = readFileSync(join(ROOT, "LICENSES.txt"), "utf8");
+  assert.equal(built, renderLicenses(css, license, ownLicense));
+  assert.ok(built.includes("Steph Ango"));
+  assert.ok(built.includes("Catppuccin"));
+});
+
+test("render removes comments without changing quoted text, data URLs or calc expressions", () => {
+  const extra = `
+/* remove this ordinary comment */
+/*! remove this legal comment */
+.minify-check::before {
+  content: "/* literal text */";
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E");
+  width: calc(100% - 2px);
+}`;
+  const output = render(css, minimal, palette + extra);
+  assert.ok(!output.includes("remove this ordinary comment"));
+  assert.ok(!output.includes("remove this legal comment"));
+  assert.ok(!output.includes("@settings"));
+  assert.ok(output.includes('"/* literal text */"'));
+  assert.ok(output.includes("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E"));
+  assert.ok(output.includes("calc(100% - 2px)"));
 });
 
 test("CSS palette changes inject column width, interface backgrounds and derived color channels", t => {
@@ -81,14 +121,14 @@ test("CSS palette changes inject column width, interface backgrounds and derived
   writeFileSync(join(root, "palette.css"), edited);
   build(root);
   const output = readFileSync(join(root, "theme.css"), "utf8");
-  assert.ok(output.includes(edited));
-  assert.match(output, /--text_max_width: 45rem;/);
-  assert.match(output, /--line-width: var\(--text_max_width\);/);
+  assert.ok(output.includes(minified(edited)));
+  assert.match(output, /--text_max_width: 45rem(?:;|})/);
+  assert.match(output, /--line-width: var\(--text_max_width\)(?:;|})/);
   assert.match(output, /--color-blue-rgb: 255, 0, 0;/);
   assert.match(output, /--accent-h: 0;/);
   assert.match(output, /--accent-s: 100%;/);
   assert.match(output, /--accent-l: 50%;/);
-  assert.match(output, /--interactive-accent-rgb: 255, 0, 0;/);
+  assert.match(output, /--interactive-accent-rgb: 255, 0, 0(?:;|})/);
   assert.match(output, /--color-orange-rgb: 203, 75, 22;/);
   assert.match(output, /--input-border-color: rgb\(255, 0, 0\);/);
   assert.match(output, /--dropdown-border-color: rgb\(255, 0, 0\);/);
@@ -145,6 +185,14 @@ test("invalid or missing palette colors preserve the previous CSS", t => {
   }
 });
 
+test("a CSS minification warning preserves the previous stylesheet and licenses", t => {
+  const root = fixture(t);
+  const previous = ["theme.css", "LICENSES.txt"].map(name => readFileSync(join(root, name), "utf8"));
+  writeFileSync(join(root, "palette.css"), palette + "\na { color red; }\n");
+  assert.throws(() => build(root), /CSS/);
+  assert.deepEqual(["theme.css", "LICENSES.txt"].map(name => readFileSync(join(root, name), "utf8")), previous);
+});
+
 test("numeric versions order correctly and reject invalid tags", () => {
   assert.equal(compareVersions("9.1.10", "9.1.9"), 1);
   assert.equal(compareVersions("9.1.4", "10.0.0"), -1);
@@ -177,11 +225,14 @@ test("update installs a newer release by immutable commit and preserves the them
   const localPalette = palette.replaceAll("#268bd2", "#ff0000");
   writeFileSync(join(root, "palette.css"), localPalette);
   const calls: string[] = [];
-  assert.match(await update(root, requester(responses(), calls)), /0\.0\.1 ->/);
+  const replies = responses();
+  replies.set(`${raw}/LICENSE`, license + "\nCopyright (c) Updated upstream notice\n");
+  assert.match(await update(root, requester(replies, calls)), /0\.0\.1 ->/);
   assert.deepEqual(calls, [...responses().keys()]);
   assert.deepEqual(JSON.parse(readFileSync(join(root, "scripts/minimal/version.json"), "utf8")), minimal);
   assert.equal(readFileSync(join(root, "theme.css"), "utf8"), render(css, minimal, localPalette));
   assert.equal(readFileSync(join(root, "palette.css"), "utf8"), localPalette);
+  assert.ok(readFileSync(join(root, "LICENSES.txt"), "utf8").includes("Updated upstream notice"));
   const updated = JSON.parse(readFileSync(join(root, "manifest.json"), "utf8"));
   assert.equal(updated.minAppVersion, minimal.minAppVersion);
   assert.equal(updated.version, manifest.version);
