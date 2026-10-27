@@ -35,6 +35,10 @@ The ribbon and right sidebar overlay the workspace without moving the text. They
 
 Edge reveal requires the ribbon to be enabled and the right sidebar to be expanded in Obsidian. If either has been closed through Obsidian's own controls, restore it from the command palette first. The status bar, including plugin controls such as Finition's navigation and counters, remains visible.
 
+![Ultra Minimal: pointer revealing the ribbon and right sidebar in light and dark modes](doc/interface.gif)
+
+Animated demonstration rendered with the theme's CSS: a 750 px text column that stays in place while the edge panels appear.
+
 ## Edit and build
 
 Requires Node.js ≥ 24.12.0 and npm. No dependencies or package installation are needed.
