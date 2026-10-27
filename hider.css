@@ -1,0 +1,149 @@
+/* Visibilité de l'interface : commenter une règle pour désactiver son masquage.
+   Les options non activées sont regroupées à la fin. Reconstruire avec npm run build. */
+
+/* Barres de défilement invisibles ; le défilement reste possible. */
+body {
+  --scrollbar-native-width: none;
+  --scrollbar-width: 0px;
+  --scrollbar-height: 0px;
+}
+
+/* Pied de l'explorateur : nom du vault, changement de vault et réglages. */
+body {
+  --vault-profile-display: none;
+}
+
+/* Nom du fichier ajouté automatiquement au-dessus du contenu. */
+.inline-title {
+  display: none;
+}
+
+/* Infobulles d'Obsidian. */
+.tooltip {
+  display: none;
+}
+
+/* Suggestions de recherche. */
+.suggestion-container.mod-search-suggestion {
+  display: none;
+}
+
+/* Propriétés YAML en lecture uniquement ; elles restent accessibles en édition. */
+.markdown-reading-view .metadata-container {
+  display: none;
+}
+
+/* En-tête des notes : nom du fichier, navigation et boutons d'action natifs. */
+.workspace-leaf-content[data-type="markdown"] > .view-header {
+  display: none;
+}
+
+/* Barre d'onglets des notes, sans espace réservé ni détection au survol. */
+.workspace-split.mod-root .workspace-tab-header-container {
+  display: none;
+}
+
+/* Seconde barre de l'explorateur : création, tri et repli des dossiers. */
+.workspace-leaf-content[data-type="file-explorer"] .nav-header {
+  display: none;
+}
+
+/* Première barre de l'explorateur : conserver uniquement Dossiers et Recherche. */
+.workspace-split.mod-primary-split .workspace-tab-header:not([data-type="file-explorer"], [data-type="search"]) {
+  display: none;
+}
+
+/* Autres commandes de la première barre : repli du panneau, nouvel onglet, liste. */
+.workspace-split.mod-primary-split :is(.sidebar-toggle-button, .workspace-tab-header-new-tab, .workspace-tab-header-tab-list) {
+  display: none;
+}
+
+/* Filets de la barre d'état et de l'explorateur. */
+body {
+  --status-bar-border-width: 0;
+}
+
+.workspace-split.mod-primary-split {
+  --tab-outline-width: 0;
+}
+
+.workspace-split.mod-primary-split > .workspace-leaf-resize-handle {
+  border-inline-end-width: 0;
+}
+
+/* Bureau : ruban à gauche et panneau droit révélés au bord, sans déplacer le texte.
+   Ils restent ouverts pendant le survol ou tant qu'un de leurs contrôles a le focus. */
+@media (hover: hover) and (pointer: fine) {
+  body:not(.is-mobile) .workspace-split.mod-primary-split .workspace-tab-header-container-inner {
+    margin-inline-start: 1px;
+  }
+
+  body:not(.is-mobile) .workspace {
+    position: relative;
+  }
+
+  /* Panneau droit : zone de détection transparente de 1 px. */
+  body:not(.is-mobile) .workspace-split.mod-secondary-split {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    z-index: var(--layer-sidedock);
+    transform: translateX(calc(100% - 1px));
+    opacity: 0;
+  }
+
+  body:not(.is-mobile) .workspace-split.mod-secondary-split:is(:hover, :focus-within) {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  /* Ruban gauche : zone de détection transparente de 1 px. */
+  body:not(.is-mobile) .workspace-ribbon.mod-primary {
+    width: 1px;
+    flex-basis: 1px;
+    min-width: 0;
+    padding-inline: 0;
+    overflow: hidden;
+    z-index: var(--layer-popover);
+    opacity: 0;
+  }
+
+  /* La décoration native ne doit pas recouvrir les boutons Dossiers/Recherche. */
+  body:not(.is-mobile) .workspace-ribbon.mod-primary::before {
+    display: none;
+  }
+
+  body:not(.is-mobile) .workspace-ribbon.mod-primary:is(:hover, :focus-within) {
+    width: var(--ribbon-width);
+    flex-basis: var(--ribbon-width);
+    padding: var(--ribbon-padding);
+    margin-inline-end: calc(1px - var(--ribbon-width));
+    opacity: 1;
+  }
+}
+
+/* OPTIONS NON ACTIVÉES : retirer les marqueurs de commentaire du bloc choisi. */
+
+/* Barre d'état : conservée, notamment pour les commandes et compteurs de Finition.
+.status-bar {
+  display: none;
+}
+*/
+
+/* Compteurs de résultats de recherche, liens entrants et liens sortants : conservés.
+:is(.backlink-pane, .outgoing-link-pane, .search-result-container) .tree-item-flair {
+  display: none;
+}
+*/
+
+/* Instructions de clavier dans les palettes de commandes et de navigation : conservées.
+.prompt-instructions {
+  display: none;
+}
+*/
+
+/* Bouton de repli du panneau droit : conservé lorsque le panneau est révélé.
+.workspace-split.mod-secondary-split .sidebar-toggle-button {
+  display: none;
+}
+*/

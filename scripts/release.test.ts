@@ -36,7 +36,7 @@ function fixture(t: TestContext): string {
   const root = mkdtempSync(join(tmpdir(), "crouzet release check "));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   cpSync(join(ROOT, "scripts"), join(root, "scripts"), { recursive: true });
-  for (const file of ["release.sh", "theme.css", "package.json", "palette.css"]) cpSync(join(ROOT, file), join(root, file));
+  for (const file of ["release.sh", "theme.css", "package.json", "palette.css", "hider.css"]) cpSync(join(ROOT, file), join(root, file));
   mkdirSync(join(root, "bin"));
   for (const tool of ["git", "gh"]) {
     writeFileSync(join(root, "bin", tool), driver);
