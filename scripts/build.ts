@@ -8,7 +8,7 @@ import { compilePalette } from "./palette.ts";
 export const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
 export const VERSION = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 export function render(palette: string): string {
-  return `/* CrouzetTheme. MIT License; see LICENSE. */\n${compilePalette(palette)}\n${customize()}`;
+  return `/* Ultra Minimal. MIT License; see LICENSE. */\n${compilePalette(palette)}\n${customize()}`;
 }
 
 // A failed build must leave the stylesheet Obsidian is reading intact.

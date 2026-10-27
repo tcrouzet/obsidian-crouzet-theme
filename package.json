@@ -1,5 +1,5 @@
 {
-  "name": "crouzet-theme",
+  "name": "obsidian-ultra-minimal",
   "private": true,
   "type": "module",
   "engines": { "node": ">=24.12.0" },

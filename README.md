@@ -1,6 +1,10 @@
-# CrouzetTheme
+# Ultra Minimal
 
-A Solarized theme built on Obsidian's native interface, with blue headings and links, orange tags and property names, and green property values. Light and dark modes share the same layout; dark mode reverses the Solarized neutral colors automatically.
+![Ultra Minimal by tcrouzet — Solarized light and dark writing interfaces](doc/cover.png)
+
+Minimal isn't minimal enough. Ultra Minimal turns Obsidian into a Ulysses-like writing environment for long-form texts, with Solarized colors.
+
+Ultra Minimal is also lighter in code: about 17 KB of CSS, compared with roughly 270 KB for Minimal.
 
 Notes use Menlo at `23px` by default, with Consolas, DejaVu Sans Mono and monospace fallbacks. The text column is limited to `750px`. The explorer and command ribbon share the editor background, with thin separators. Interface and code fonts follow Obsidian's settings.
 
