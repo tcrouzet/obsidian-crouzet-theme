@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { readFileSync, renameSync, rmSync, watchFile, writeFileSync } from "node:fs";
+import { readFileSync, renameSync, rmSync, watch, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { customize } from "./customize.ts";
@@ -42,10 +42,10 @@ if (import.meta.main) {
       process.exitCode = 1;
     }
   };
-  rebuild();
   if (process.argv.includes("--watch")) {
-    for (const file of ["palette.css", "hider.css"]) {
-      watchFile(join(ROOT, file), { interval: 200 }, rebuild);
-    }
+    watch(ROOT, (_, file) => {
+      if (file === "palette.css" || file === "hider.css") rebuild();
+    });
   }
+  rebuild();
 }

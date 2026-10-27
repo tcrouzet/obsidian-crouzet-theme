@@ -138,28 +138,38 @@ test("dev watch rebuilds after palette, hider CSS and TypeScript changes", { tim
   let errors = "";
   child.stderr.on("data", data => { errors += data; });
   const lines = createInterface({ input: child.stdout });
+  const abort = () => { child.kill(); };
+  t.signal.addEventListener("abort", abort, { once: true });
   try {
-    let builds = 0;
+    let stage = "initial";
     for await (const line of lines) {
       if (!line.includes("theme.css reconstruit")) continue;
-      builds++;
-      if (builds === 1) {
+      const output = readFileSync(join(root, "theme.css"), "utf8");
+      if (stage === "initial") {
+        stage = "palette";
         writeFileSync(join(root, "palette.css"), activePalette
           .replace(/--solarized-blue:[^;]+;/, "--solarized-blue: #278bd2;")
           .replace(/--link_color:[^;]+;/, "--link_color: var(--solarized-blue);"));
-      } else if (builds === 2) {
-        assert.match(readFileSync(join(root, "theme.css"), "utf8"), /--color-blue-rgb: 39, 139, 210;/);
+      } else if (stage === "palette" && output.includes("--color-blue-rgb: 39, 139, 210;")) {
+        stage = "hider";
         writeFileSync(join(root, "hider.css"), hider + "\n.prompt-instructions { display: none; }\n");
-      } else if (builds === 3) {
-        assert.ok(readFileSync(join(root, "theme.css"), "utf8").endsWith("\n.prompt-instructions { display: none; }\n"));
+      } else if (stage === "hider" && output.endsWith("\n.prompt-instructions { display: none; }\n")) {
+        stage = "typescript";
         const typography = join(root, "scripts/customize.ts");
         writeFileSync(typography, readFileSync(typography, "utf8").replace("--font-text-size: 23px", "--font-text-size: 24px"));
-      } else break;
+      } else if (stage === "typescript" && output.includes("--font-text-size: 24px")) {
+        stage = "done";
+        break;
+      }
     }
-    assert.equal(builds, 4, errors);
-    assert.match(readFileSync(join(root, "theme.css"), "utf8"), /--solarized-blue: #278bd2;/);
-    assert.match(readFileSync(join(root, "theme.css"), "utf8"), /--font-text-size: 24px/);
+    assert.equal(stage, "done", `Surveillance bloquee a l'etape ${stage}\n${errors}`);
+    const output = readFileSync(join(root, "theme.css"), "utf8");
+    assert.match(output, /--solarized-blue: #278bd2;/);
+    assert.match(output, /--color-blue-rgb: 39, 139, 210;/);
+    assert.ok(output.endsWith("\n.prompt-instructions { display: none; }\n"));
+    assert.match(output, /--font-text-size: 24px/);
   } finally {
+    t.signal.removeEventListener("abort", abort);
     lines.close();
     child.kill();
     await exited;

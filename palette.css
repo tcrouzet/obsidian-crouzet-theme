@@ -1,13 +1,14 @@
-/* Nuancier Solarized : https://ethanschoonover.com/solarized/ */
+/* Brume 7 par défaut : gris bleutés et texte principal à au moins 7:1.
+   Accents Solarized : https://ethanschoonover.com/solarized/ */
 :root {
-  --solarized-base03: #002b36;
-  --solarized-base02: #073642;
-  --solarized-base01: #586e75;
-  --solarized-base00: #657b83;
-  --solarized-base0: #839496;
-  --solarized-base1: #93a1a1;
-  --solarized-base2: #eee8d5;
-  --solarized-base3: #fdf6e3;
+  --solarized-base03: #232a33;
+  --solarized-base02: #2d3642;
+  --solarized-base01: #485464;
+  --solarized-base00: #717d8b;
+  --solarized-base0: #8896a6;
+  --solarized-base1: #a8b6c6;
+  --solarized-base2: #e3e9f0;
+  --solarized-base3: #f2f5f8;
   --solarized-yellow: #b58900;
   --solarized-orange: #cb4b16;
   --solarized-red: #dc322f;
@@ -17,25 +18,6 @@
   --solarized-cyan: #2aa198;
   --solarized-green: #859900;
 }
-
-/* :root {
-  --solarized-base03: #262626;
-  --solarized-base02: #303030;
-  --solarized-base01: #6a6a6a;
-  --solarized-base00: #777777;
-  --solarized-base0: #919191;
-  --solarized-base1: #9e9e9e;
-  --solarized-base2: #e8e8e8;
-  --solarized-base3: #f6f6f6;
-  --solarized-yellow: #b58900;
-  --solarized-orange: #cb4b16;
-  --solarized-red: #dc322f;
-  --solarized-magenta: #d33682;
-  --solarized-violet: #6c71c4;
-  --solarized-blue: #268bd2;
-  --solarized-cyan: #2aa198;
-  --solarized-green: #859900;
-} */
 
 /* Couleurs du thème ; inversion automatique des tons en mode sombre.
    Filets, contours et boutons neutres : mélanges du fond principal et du texte.
@@ -70,5 +52,5 @@
 }
 
 :root {
-  --text_max_width: 750px; /* Largeur maximale de la colonne en édition et lecture, avec « Longueur de ligne lisible » activée dans Obsidian. */
+  --text_max_width: 700px; /* Largeur maximale de la colonne en édition et lecture, avec « Longueur de ligne lisible » activée dans Obsidian. */
 }

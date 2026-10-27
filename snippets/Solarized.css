@@ -1,0 +1,12 @@
+/* Ultra Minimal : tons neutres de Solarized d'origine, accents inchangés.
+   Texte en base01 en clair et base1 en sombre ; activer ce snippet seul. */
+:root {
+  --solarized-base03: #002b36; /* Fond sombre et notifications. */
+  --solarized-base02: #073642; /* Fond secondaire sombre. */
+  --solarized-base01: #586e75; /* Texte principal et secondaire en clair. */
+  --solarized-base00: #657b83; /* Ton intermédiaire sombre. */
+  --solarized-base0: #839496;  /* Ton intermédiaire clair. */
+  --solarized-base1: #93a1a1;  /* Texte principal et secondaire en sombre. */
+  --solarized-base2: #eee8d5;  /* Fond secondaire clair. */
+  --solarized-base3: #fdf6e3;  /* Fond clair. */
+}
