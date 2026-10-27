@@ -1,0 +1,12 @@
+/* Ultra Minimal : Papier, ivoire et bruns sourds. Accents Solarized inchangés.
+   Activer uniquement ce snippet de palette ; l'inversion est gérée par le thème. */
+:root {
+  --solarized-base03: #29251f; /* Fond sombre et notifications. */
+  --solarized-base02: #342e25; /* Fond secondaire sombre. */
+  --solarized-base01: #6b6256; /* Texte principal et secondaire en clair. */
+  --solarized-base00: #7e7568; /* Ton intermédiaire sombre. */
+  --solarized-base0: #948a7a;  /* Ton intermédiaire clair. */
+  --solarized-base1: #a9a08f;  /* Texte principal et secondaire en sombre. */
+  --solarized-base2: #ebe4d7;  /* Fond secondaire clair. */
+  --solarized-base3: #f5f1e8;  /* Fond clair. */
+}

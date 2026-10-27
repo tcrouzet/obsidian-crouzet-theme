@@ -1,0 +1,12 @@
+/* Ultra Minimal : Sauge, verts grisés. Accents Solarized inchangés.
+   Activer uniquement ce snippet de palette ; l'inversion est gérée par le thème. */
+:root {
+  --solarized-base03: #252d27; /* Fond sombre et notifications. */
+  --solarized-base02: #303a32; /* Fond secondaire sombre. */
+  --solarized-base01: #5f6a5b; /* Texte principal et secondaire en clair. */
+  --solarized-base00: #74816d; /* Ton intermédiaire sombre. */
+  --solarized-base0: #8c9a85;  /* Ton intermédiaire clair. */
+  --solarized-base1: #a1ad9a;  /* Texte principal et secondaire en sombre. */
+  --solarized-base2: #e3e9dc;  /* Fond secondaire clair. */
+  --solarized-base3: #f2f5ed;  /* Fond clair. */
+}

@@ -51,14 +51,23 @@ Edge reveal requires the ribbon to be enabled and the right sidebar to be expand
 
 Animated demonstration rendered with the theme's CSS: a 750 px text column that stays in place while the edge panels appear.
 
-## Optional gray palette
+## Optional palettes
 
-Solarized is the default palette. [snippets/Gris.css](snippets/Gris.css) replaces only its eight neutral tones; accents, typography and interface behavior stay the same. The previews above show this gray variant.
+Solarized is the default palette. Each snippet replaces only its eight neutral tones; accents, typography and interface behavior stay the same. The previews above show the Gris variant.
 
-1. Copy `snippets/Gris.css` into your vault's `.obsidian/snippets/` folder.
-2. In **Settings → Appearance → CSS snippets**, refresh the list and enable **Gris**.
+| Palette | Tones | Light text contrast | Dark text contrast |
+| --- | --- | --- | --- |
+| [Gris](snippets/Gris.css) | Neutral gray | 5.00:1 | 5.65:1 |
+| [Papier](snippets/Papier.css) | Ivory and muted brown | 5.31:1 | 5.88:1 |
+| [Brume](snippets/Brume.css) | Blue gray | 5.18:1 | 6.26:1 |
+| [Sauge](snippets/Sauge.css) | Gray green | 5.15:1 | 6.04:1 |
 
-Disable **Gris** to return to Solarized. Both palettes support light and dark modes with the same automatic inversion. No rebuild is needed when enabling or disabling the snippet; keep only one palette snippet enabled at a time.
+Ratios are calculated for body text: `base01` on `base3` in light mode and `base1` on `base03` in dark mode, using the [WCAG relative luminance formula](https://www.w3.org/WAI/WCAG22/Techniques/general/G18). All exceed the 4.5:1 minimum on the main background. Papier, Brume and Sauge also exceed it on their secondary backgrounds. These measurements cover the neutral text pairs; accent colors are unchanged.
+
+1. Copy the chosen CSS file from `snippets/` into your vault's `.obsidian/snippets/` folder.
+2. In **Settings → Appearance → CSS snippets**, refresh the list and enable its name.
+
+Disable the snippet to return to Solarized. Every palette supports light and dark modes with the same automatic inversion.
 
 ## Edit and build
 
