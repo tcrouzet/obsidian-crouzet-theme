@@ -1,0 +1,13 @@
+/* Ultra Minimal : gris neutres. Les accents Solarized restent inchangés.
+   Copier dans .obsidian/snippets/ puis activer « Gris » dans Apparence.
+   Les mêmes tons servent aux deux modes ; le thème gère leur inversion. */
+:root {
+  --solarized-base03: #262626; /* Fond sombre et notifications. */
+  --solarized-base02: #303030; /* Fond secondaire sombre. */
+  --solarized-base01: #6a6a6a; /* Texte principal et secondaire en clair. */
+  --solarized-base00: #777777; /* Ton intermédiaire sombre. */
+  --solarized-base0: #919191;  /* Ton intermédiaire clair. */
+  --solarized-base1: #9e9e9e;  /* Texte principal et secondaire en sombre. */
+  --solarized-base2: #e8e8e8;  /* Fond secondaire clair. */
+  --solarized-base3: #f6f6f6;  /* Fond clair. */
+}

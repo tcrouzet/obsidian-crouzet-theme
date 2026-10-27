@@ -51,6 +51,15 @@ Edge reveal requires the ribbon to be enabled and the right sidebar to be expand
 
 Animated demonstration rendered with the theme's CSS: a 750 px text column that stays in place while the edge panels appear.
 
+## Optional gray palette
+
+Solarized is the default palette. [snippets/Gris.css](snippets/Gris.css) replaces only its eight neutral tones; accents, typography and interface behavior stay the same. The previews above show this gray variant.
+
+1. Copy `snippets/Gris.css` into your vault's `.obsidian/snippets/` folder.
+2. In **Settings → Appearance → CSS snippets**, refresh the list and enable **Gris**.
+
+Disable **Gris** to return to Solarized. Both palettes support light and dark modes with the same automatic inversion. No rebuild is needed when enabling or disabling the snippet; keep only one palette snippet enabled at a time.
+
 ## Edit and build
 
 Requires Node.js ≥ 24.12.0 and npm. No dependencies or package installation are needed.
