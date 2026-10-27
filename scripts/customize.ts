@@ -144,15 +144,6 @@ body {
   padding-bottom: 0;
 }
 
-.markdown-source-view.mod-cm6.is-live-preview .cm-line.HyperMD-hr {
-  text-indent: 0;
-  padding-inline-start: 0;
-}
-
-.markdown-rendered hr {
-  margin-inline: 0;
-}
-
 .markdown-rendered blockquote {
   padding-inline-start: 1.1em;
   font-style: normal;
