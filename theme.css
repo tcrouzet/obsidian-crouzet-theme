@@ -1,6 +1,6 @@
 /* Ultra Minimal. MIT License; see LICENSE. */
 /* Nuancier Solarized : https://ethanschoonover.com/solarized/ */
-/* :root {
+:root {
   --solarized-base03: #002b36;
   --solarized-base02: #073642;
   --solarized-base01: #586e75;
@@ -17,9 +17,9 @@
   --solarized-blue: #268bd2;
   --solarized-cyan: #2aa198;
   --solarized-green: #859900;
-} */
+}
 
-:root {
+/* :root {
   --solarized-base03: #262626;
   --solarized-base02: #303030;
   --solarized-base01: #6a6a6a;
@@ -36,7 +36,7 @@
   --solarized-blue: #268bd2;
   --solarized-cyan: #2aa198;
   --solarized-green: #859900;
-}
+} */
 
 /* Couleurs du thème ; inversion automatique des tons en mode sombre.
    Filets, contours et boutons neutres : mélanges du fond principal et du texte.
