@@ -11,6 +11,7 @@ import { build, render, ROOT } from "./build.ts";
 import { compilePalette } from "./palette.ts";
 
 const palette = readFileSync(join(ROOT, "palette.css"), "utf8");
+const activePalette = palette.replace(/\/\*[\s\S]*?\*\//g, "");
 const hider = readFileSync(join(ROOT, "hider.css"), "utf8");
 const manifest = JSON.parse(readFileSync(join(ROOT, "manifest.json"), "utf8"));
 
@@ -42,7 +43,8 @@ test("root CSS is reproducible, standalone and uses native Obsidian variables", 
 
 test("palette changes update native color channels, accents and text width", t => {
   const root = fixture(t);
-  const edited = palette.replace("#268bd2", "#ff0000")
+  const edited = activePalette.replace(/--solarized-blue:[^;]+;/, "--solarized-blue: #ff0000;")
+    .replace(/--link_color:[^;]+;/, "--link_color: var(--solarized-blue);")
     .replace(/--action_color:\s*[^;]+/, "--action_color: var(--solarized-blue)")
     .replace(/--text_max_width:\s*[^;]+/, "--text_max_width: 45rem");
   writeFileSync(join(root, "palette.css"), edited);
@@ -63,13 +65,13 @@ test("dark mode inverts every Solarized neutral pair and preserves custom colors
     ["base0", "base00"], ["base1", "base01"], ["base2", "base02"], ["base3", "base03"],
     ["orange", "orange"],
   ]) {
-    const edited = palette.replace(/--screen_background:[^;]+;/,
+    const edited = activePalette.replace(/--screen_background:[^;]+;/,
       `--screen_background: var(--solarized-${light});`);
     const css = compilePalette(edited);
     assert.ok(mode(css, "light").includes(`--background-primary: var(--solarized-${light});`));
     assert.ok(mode(css, "dark").includes(`--background-primary: var(--solarized-${dark});`));
   }
-  const edited = palette.replace(/--screen_background:[^;]+;/, "--screen_background: #123456;");
+  const edited = activePalette.replace(/--screen_background:[^;]+;/, "--screen_background: #123456;");
   const css = compilePalette(edited);
   for (const theme of ["light", "dark"]) assert.ok(mode(css, theme).includes("--background-primary: var(--screen_background);"));
 });
@@ -78,17 +80,17 @@ test("missing, invalid, duplicated or cyclic palette values preserve the previou
   const root = fixture(t);
   const before = readFileSync(join(root, "theme.css"), "utf8");
   for (const edited of [
-    palette.replace("#268bd2", "#invalid"),
-    palette.replace(/--link_color:[^;]+;/, ""),
-    palette.replace("#cb4b16", "#invalid"),
-    palette + "\n:root { --link_color: #ffffff; }",
-    palette.replace("var(--solarized-blue)", "var(--missing_color)"),
-    palette.replace("var(--solarized-blue)", "var(--link_color)"),
-    palette.replace(/--text_max_width:[^;]+;/, "--text_max_width: -10px;"),
-    palette.replace(/--text_max_width:[^;]+;/, "--text_max_width: 0px;"),
-    palette.replace(/--text_max_width:[^;]+;/, "--text_max_width: invalid;"),
-    palette + "\na { color red; }",
-    palette + "\0",
+    activePalette.replace(/--solarized-blue:[^;]+;/, "--solarized-blue: #invalid;"),
+    activePalette.replace(/--link_color:[^;]+;/, ""),
+    activePalette.replace(/--solarized-orange:[^;]+;/, "--solarized-orange: #invalid;"),
+    activePalette + "\n:root { --link_color: #ffffff; }",
+    activePalette.replace(/--link_color:[^;]+;/, "--link_color: var(--missing_color);"),
+    activePalette.replace(/--link_color:[^;]+;/, "--link_color: var(--link_color);"),
+    activePalette.replace(/--text_max_width:[^;]+;/, "--text_max_width: -10px;"),
+    activePalette.replace(/--text_max_width:[^;]+;/, "--text_max_width: 0px;"),
+    activePalette.replace(/--text_max_width:[^;]+;/, "--text_max_width: invalid;"),
+    activePalette + "\na { color red; }",
+    activePalette + "\0",
   ]) {
     writeFileSync(join(root, "palette.css"), edited);
     assert.throws(() => build(root), /Palette/);
@@ -142,7 +144,9 @@ test("dev watch rebuilds after palette, hider CSS and TypeScript changes", { tim
       if (!line.includes("theme.css reconstruit")) continue;
       builds++;
       if (builds === 1) {
-        writeFileSync(join(root, "palette.css"), palette.replace("#268bd2", "#278bd2"));
+        writeFileSync(join(root, "palette.css"), activePalette
+          .replace(/--solarized-blue:[^;]+;/, "--solarized-blue: #278bd2;")
+          .replace(/--link_color:[^;]+;/, "--link_color: var(--solarized-blue);"));
       } else if (builds === 2) {
         assert.match(readFileSync(join(root, "theme.css"), "utf8"), /--color-blue-rgb: 39, 139, 210;/);
         writeFileSync(join(root, "hider.css"), hider + "\n.prompt-instructions { display: none; }\n");

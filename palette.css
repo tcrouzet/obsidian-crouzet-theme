@@ -1,5 +1,5 @@
 /* Nuancier Solarized : https://ethanschoonover.com/solarized/ */
-:root {
+/* :root {
   --solarized-base03: #002b36;
   --solarized-base02: #073642;
   --solarized-base01: #586e75;
@@ -8,6 +8,25 @@
   --solarized-base1: #93a1a1;
   --solarized-base2: #eee8d5;
   --solarized-base3: #fdf6e3;
+  --solarized-yellow: #b58900;
+  --solarized-orange: #cb4b16;
+  --solarized-red: #dc322f;
+  --solarized-magenta: #d33682;
+  --solarized-violet: #6c71c4;
+  --solarized-blue: #268bd2;
+  --solarized-cyan: #2aa198;
+  --solarized-green: #859900;
+} */
+
+:root {
+  --solarized-base03: #262626;
+  --solarized-base02: #303030;
+  --solarized-base01: #6a6a6a;
+  --solarized-base00: #777777;
+  --solarized-base0: #919191;
+  --solarized-base1: #9e9e9e;
+  --solarized-base2: #e8e8e8;
+  --solarized-base3: #f6f6f6;
   --solarized-yellow: #b58900;
   --solarized-orange: #cb4b16;
   --solarized-red: #dc322f;
@@ -32,7 +51,7 @@
   --input-border-color-hover: var(--solarized-base0); /* Contours des champs au survol. */
   --dropdown-border-color: var(--input-border-color); /* Contours des listes déroulantes. */
   --dropdown-border-color-hover: var(--input-border-color-hover); /* Contours des listes au survol. */
-  --text_color: var(--solarized-base00);            /* Texte principal des notes et de l'interface, gras/italique, code non coloré, fichiers et onglets actifs. */
+  --text_color: var(--solarized-base01);            /* Texte principal des notes et de l'interface, gras/italique, code non coloré, fichiers et onglets actifs. */
   --muted_text: var(--solarized-base01);            /* Descriptions, libellés secondaires, icônes au repos, arborescence et citations. */
   --faint_text: var(--solarized-base1);             /* Texte discret, marqueurs de listes, signes Markdown et contours de focus. */
   --inverse_background: var(--solarized-base03);    /* Fond des notifications dans les deux modes ; les autres fonds sombres sont calculés par inversion. */
