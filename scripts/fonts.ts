@@ -6,15 +6,18 @@ export function buildFonts(root = ROOT): void {
   const snippets = [
     ...["Duo", "Mono", "Quattro"].map(family => ({
       name: `iA-Writer-${family}`,
-      family: `iA Writer ${family} S`,
-      prefix: `iAWriter${family}S`,
+      family: `iA Writer ${family} V`,
+      prefix: `iAWriter${family}V`,
       source: "https://github.com/iaolo/iA-Fonts",
+      format: "ttf",
+      variable: true,
     })),
     {
       name: "JetBrains-Mono",
       family: "JetBrains Mono",
       prefix: "JetBrainsMono",
       source: "https://github.com/JetBrains/JetBrainsMono",
+      medium: true,
     },
     {
       name: "Menlo",
@@ -29,19 +32,27 @@ export function buildFonts(root = ROOT): void {
       prefix: "SF-Mono",
       source: "https://developer.apple.com/fonts/",
       format: "woff",
+      medium: true,
     },
-  ].map(({ name, family, prefix, source, format = "woff2" }) => {
+  ].map(({ name, family, prefix, source, format = "woff2", variable = false, medium = false }) => {
     const license = readFileSync(join(root, "source_fonts", `${name}-LICENSE.md`), "utf8");
-    const faces = [
+    const faces = (variable ? [
+      ["Regular", "400 700", "normal"],
+      ["Italic", "400 700", "italic"],
+    ] : [
       ["Regular", 400, "normal"],
       ["Italic", 400, "italic"],
+      ...(medium ? [["Medium", 500, "normal"], ["MediumItalic", 500, "italic"]] : []),
       ["Bold", 700, "normal"],
       ["BoldItalic", 700, "italic"],
-    ].map(([variant, weight, style]) => {
-      const name = `${prefix}-${variant}.${format}`;
+    ]).map(([variant, weight, style]) => {
+      const name = variable && variant === "Regular" ? `${prefix}.ttf` : `${prefix}-${variant}.${format}`;
       const font = readFileSync(join(root, "source_fonts", name));
       const signature = format === "woff2" ? "wOF2" : "wOFF";
-      if (font.length < (format === "woff2" ? 48 : 44) || font.toString("ascii", 0, 4) !== signature || font.readUInt32BE(8) !== font.length) {
+      const valid = format === "ttf"
+        ? font.length >= 12 && font.readUInt32BE(0) === 0x00010000
+        : font.length >= (format === "woff2" ? 48 : 44) && font.toString("ascii", 0, 4) === signature && font.readUInt32BE(8) === font.length;
+      if (!valid) {
         throw new Error(`Police ${format.toUpperCase()} invalide : ${name}`);
       }
       return `@font-face {
@@ -49,7 +60,7 @@ export function buildFonts(root = ROOT): void {
   font-style: ${style};
   font-weight: ${weight};
   font-display: swap;
-  src: url("data:font/${format};base64,${font.toString("base64")}") format("${format}");
+  src: url("data:font/${format};base64,${font.toString("base64")}") format("${format === "ttf" ? "truetype" : format}");
 }`;
     });
     const css = `/* ${family.replace(/ S$/, "")} — ${source}
