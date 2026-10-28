@@ -11,8 +11,9 @@ test("font snippets reproduce all original faces and include their license offli
   t.after(() => rmSync(root, { recursive: true, force: true }));
   cpSync(join(ROOT, "source_fonts"), join(root, "source_fonts"), { recursive: true });
   buildFonts(root);
-  for (const [snippet, family, prefix, format = "woff2", variable = false, medium = false] of [
+  for (const [snippet, family, prefix, format = "woff2", variable = false, medium = false, normalWeight] of [
     ["iA-Writer-Duo", "iA Writer Duo V", "iAWriterDuoV", "ttf", true],
+    ["iA-Writer-Duo-Regular", "iA Writer Duo V", "iAWriterDuoV", "ttf", true, false, 400],
     ["iA-Writer-Mono", "iA Writer Mono V", "iAWriterMonoV", "ttf", true],
     ["iA-Writer-Quattro", "iA Writer Quattro V", "iAWriterQuattroV", "ttf", true],
     ["JetBrains-Mono", "JetBrains Mono", "JetBrainsMono", "woff2", false, true],
@@ -22,7 +23,8 @@ test("font snippets reproduce all original faces and include their license offli
     const name = `${snippet}.css`;
     const css = readFileSync(join(root, "snippets", "fonts", name), "utf8");
     assert.equal(css, readFileSync(join(ROOT, "snippets", "fonts", name), "utf8"));
-    assert.ok(css.includes(readFileSync(join(root, "source_fonts", `${snippet}-LICENSE.md`), "utf8").trim()));
+    const licenseName = snippet === "iA-Writer-Duo-Regular" ? "iA-Writer-Duo" : snippet;
+    assert.ok(css.includes(readFileSync(join(root, "source_fonts", `${licenseName}-LICENSE.md`), "utf8").trim()));
     const faces = [...css.matchAll(/@font-face\s*\{([^}]+)\}/g)];
     const count = variable ? 2 : medium ? 6 : 4;
     assert.equal(faces.length, count);
@@ -41,7 +43,7 @@ test("font snippets reproduce all original faces and include their license offli
     assert.equal(variants.size, count);
     assert.ok(css.includes(`.markdown-source-view.mod-cm6 .cm-scroller,
 .markdown-preview-view {
-  font-family: "${family}", monospace;
+  font-family: "${family}", monospace;${normalWeight ? `\n  font-weight: ${normalWeight};` : ""}
 }`));
     assert.doesNotMatch(css, /(?:^|})\s*body\s*\{|--font-text|--font-editor-theme|(?:^|[;{])\s*(?:color|background(?:-color)?|all)\s*:/);
     assert.doesNotMatch(css, /@import|url\("https?:|--font-interface|--font-monospace|--font-text-size|--file-line-width/);
@@ -53,7 +55,7 @@ test("missing or invalid font sources preserve the previous snippets", t => {
   t.after(() => rmSync(root, { recursive: true, force: true }));
   cpSync(join(ROOT, "source_fonts"), join(root, "source_fonts"), { recursive: true });
   cpSync(join(ROOT, "snippets", "fonts"), join(root, "snippets", "fonts"), { recursive: true });
-  const names = ["iA-Writer-Duo", "iA-Writer-Mono", "iA-Writer-Quattro", "JetBrains-Mono", "Menlo", "SF-Mono"];
+  const names = ["iA-Writer-Duo", "iA-Writer-Duo-Regular", "iA-Writer-Mono", "iA-Writer-Quattro", "JetBrains-Mono", "Menlo", "SF-Mono"];
   const before = names.map(name => readFileSync(join(root, "snippets", "fonts", `${name}.css`), "utf8"));
   for (const file of ["iAWriterQuattroV.ttf", "JetBrainsMono-Regular.woff2", "Menlo-Regular.woff"]) {
     const source = join(root, "source_fonts", file);

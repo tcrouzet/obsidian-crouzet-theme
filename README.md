@@ -69,6 +69,7 @@ SF Mono is the default note font when available on your device. To embed it or u
 - [SF Mono](snippets/fonts/SF-Mono.css) — embedded version of the default font
 - [Menlo](snippets/fonts/Menlo.css)
 - [iA Writer Duo](snippets/fonts/iA-Writer-Duo.css)
+- [iA Writer Duo Regular](snippets/fonts/iA-Writer-Duo-Regular.css) — body text at weight 400, with bold retained
 - [iA Writer Mono](snippets/fonts/iA-Writer-Mono.css)
 - [iA Writer Quattro](snippets/fonts/iA-Writer-Quattro.css)
 - [JetBrains Mono](snippets/fonts/JetBrains-Mono.css)

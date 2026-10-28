@@ -13,6 +13,16 @@ export function buildFonts(root = ROOT): void {
       variable: true,
     })),
     {
+      name: "iA-Writer-Duo-Regular",
+      family: "iA Writer Duo V",
+      prefix: "iAWriterDuoV",
+      source: "https://github.com/iaolo/iA-Fonts",
+      format: "ttf",
+      variable: true,
+      licenseName: "iA-Writer-Duo",
+      normalWeight: 400,
+    },
+    {
       name: "JetBrains-Mono",
       family: "JetBrains Mono",
       prefix: "JetBrainsMono",
@@ -34,8 +44,8 @@ export function buildFonts(root = ROOT): void {
       format: "woff",
       medium: true,
     },
-  ].map(({ name, family, prefix, source, format = "woff2", variable = false, medium = false }) => {
-    const license = readFileSync(join(root, "source_fonts", `${name}-LICENSE.md`), "utf8");
+  ].map(({ name, family, prefix, source, format = "woff2", variable = false, medium = false, licenseName = name, normalWeight }) => {
+    const license = readFileSync(join(root, "source_fonts", `${licenseName}-LICENSE.md`), "utf8");
     const faces = (variable ? [
       ["Regular", "400 700", "normal"],
       ["Italic", "400 700", "italic"],
@@ -73,7 +83,7 @@ ${faces.join("\n\n")}
 
 .markdown-source-view.mod-cm6 .cm-scroller,
 .markdown-preview-view {
-  font-family: "${family}", monospace;
+  font-family: "${family}", monospace;${normalWeight ? `\n  font-weight: ${normalWeight};` : ""}
 }
 `;
     return { name: `${name}.css`, css };
