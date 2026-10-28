@@ -1,7 +1,7 @@
 export function customize(): string {
   return `
 body {
-  --font-text-theme: Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  --font-text-theme: "SF Mono", SFMono-Regular, ui-monospace, Consolas, "DejaVu Sans Mono", monospace;
   --font-editor-theme: var(--font-text-theme);
   --font-text-size: 23px;
   --font-ui-smaller: 11px;
@@ -55,6 +55,8 @@ body {
   --blockquote-border-thickness: 1px;
   --blockquote-border-color: var(--background-modifier-border-hover);
   --blockquote-color: var(--text-muted);
+  --blockquote-font-style: italic;
+  --blockquote-style: var(--blockquote-font-style);
   --tag-background: transparent;
   --tag-background-hover: transparent;
   --tag-border-color: var(--background-modifier-border);
@@ -145,7 +147,10 @@ body {
 
 .markdown-rendered blockquote {
   padding-inline-start: 1.1em;
-  font-style: normal;
+}
+
+.markdown-source-view.mod-cm6 .cm-quote {
+  font-style: var(--blockquote-font-style);
 }
 
 .markdown-rendered table {

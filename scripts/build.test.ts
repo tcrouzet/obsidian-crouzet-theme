@@ -36,7 +36,7 @@ test("root CSS is reproducible, standalone and uses native Obsidian variables", 
   assert.ok(output.endsWith(hider));
   assert.ok(Buffer.byteLength(output) < 100_000);
   assert.doesNotMatch(output, /minimal-|@import|!important|:has\(/);
-  assert.match(output, /--font-text-theme: Menlo, Consolas, "DejaVu Sans Mono", monospace/);
+  assert.match(output, /--font-text-theme: "SF Mono", SFMono-Regular, ui-monospace, Consolas, "DejaVu Sans Mono", monospace/);
   assert.match(output, /--font-text-size: 23px/);
   assert.match(output, /--file-line-width: var\(--text_max_width\)/);
 });

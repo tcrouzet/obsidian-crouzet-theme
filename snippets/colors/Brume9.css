@@ -1,12 +1,12 @@
-/* Ultra Minimal : Brume, gris bleutés. Accents Solarized inchangés.
-   Activer uniquement ce snippet de palette ; l'inversion est gérée par le thème. */
+/* Ultra Minimal : Brume9, contraste du texte principal proche de 9:1.
+   Fonds et accents identiques à Brume5 ; activer ce snippet seul. */
 :root {
   --solarized-base03: #232a33; /* Fond sombre et notifications. */
   --solarized-base02: #2d3642; /* Fond secondaire sombre. */
-  --solarized-base01: #5c6878; /* Texte principal et secondaire en clair. */
+  --solarized-base01: #384454; /* Texte principal et secondaire en clair. */
   --solarized-base00: #717d8b; /* Ton intermédiaire sombre. */
   --solarized-base0: #8896a6;  /* Ton intermédiaire clair. */
-  --solarized-base1: #9eacbc;  /* Texte principal et secondaire en sombre. */
+  --solarized-base1: #c0cede;  /* Texte principal et secondaire en sombre. */
   --solarized-base2: #e3e9f0;  /* Fond secondaire clair. */
   --solarized-base3: #f2f5f8;  /* Fond clair. */
 }

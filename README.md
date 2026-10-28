@@ -10,7 +10,7 @@ Ultra Minimal is highly customizable through color and font snippets, no plugin 
 
 Ultra Minimal handles interface hiding itself, making a plugin such as Hider or ProZen unnecessary for a distraction-free writing workspace.
 
-Notes use Menlo at `23px` by default, with Consolas, DejaVu Sans Mono and monospace fallbacks. The text column is limited to `700px`.
+Notes prefer SF Mono at `23px` by default, with native monospace, Consolas, DejaVu Sans Mono and monospace fallbacks. The text column is limited to `700px`. The optional SF Mono snippet embeds the font for devices where it is unavailable.
 
 ## Interface visibility
 
@@ -49,11 +49,11 @@ Brume 7 is the default palette and needs no snippet. Optional snippets replace i
 | [Solarized](snippets/colors/Solarized.css) | Original Solarized neutral tones | 4.99:1 | 5.61:1 |
 | [Gris](snippets/colors/Gris.css) | Neutral gray | 5.00:1 | 5.65:1 |
 | [Papier](snippets/colors/Papier.css) | Ivory and muted brown | 5.31:1 | 5.88:1 |
-| [Brume](snippets/colors/Brume.css) | Blue gray | 5.18:1 | 6.26:1 |
+| [Brume5](snippets/colors/Brume5.css) | Blue gray | 5.18:1 | 6.26:1 |
 | [Sauge](snippets/colors/Sauge.css) | Gray green | 5.15:1 | 6.04:1 |
-| [contrast9](snippets/colors/contrast9.css) | Brume with stronger text contrast | 9.04:1 | 9.05:1 |
+| [Brume9](snippets/colors/Brume9.css) | Brume with stronger text contrast | 9.04:1 | 9.05:1 |
 
-Ratios are calculated for body text in light mode and in dark mode, using the [WCAG relative luminance formula](https://www.w3.org/WAI/WCAG22/Techniques/general/G18). All exceed the 4.5:1 minimum on the main background. Papier, Brume and Sauge also exceed it on their secondary backgrounds.
+Ratios are calculated for body text in light mode and in dark mode, using the [WCAG relative luminance formula](https://www.w3.org/WAI/WCAG22/Techniques/general/G18). All exceed the 4.5:1 minimum on the main background. Papier, Brume5 and Sauge also exceed it on their secondary backgrounds.
 
 1. Copy the chosen CSS file from `snippets/colors/` into your vault's `.obsidian/snippets/` folder.
 2. In **Settings → Appearance → CSS snippets**, refresh the list and enable its name.
@@ -62,8 +62,10 @@ Disable the snippet to return to Brume 7.
 
 ## Optional fonts
 
-Choose an optional font for note text:
+SF Mono is the default note font when available on your device. To embed it or use another font without system installation, choose a standalone snippet:
 
+- [SF Mono](snippets/fonts/SF-Mono.css) — embedded version of the default font
+- [Menlo](snippets/fonts/Menlo.css)
 - [iA Writer Duo](snippets/fonts/iA-Writer-Duo.css)
 - [iA Writer Mono](snippets/fonts/iA-Writer-Mono.css)
 - [iA Writer Quattro](snippets/fonts/iA-Writer-Quattro.css)
@@ -71,9 +73,9 @@ Choose an optional font for note text:
 
 Download the chosen CSS file using GitHub's **Download raw file** button, copy it into your vault's `.obsidian/snippets/` folder, then refresh and enable it in **Settings → Appearance → CSS snippets**. Enable only one font snippet at a time. It can be combined with a palette snippet.
 
-Each file embeds the original WOFF2 fonts, including regular, italic, bold and bold italic. Fonts work offline without system installation, including on mobile. The snippet overrides the note font selected in Obsidian; interface and code fonts, text size and column width keep their existing settings. Disable it to return to your previous font.
+Each file embeds compressed WOFF or WOFF2 fonts, including regular, italic, bold and bold italic. Fonts work offline, including on mobile. The snippet overrides the note font selected in Obsidian; interface and code fonts, text size and column width keep their existing settings. Disable it to restore your Obsidian font preference, with SF Mono as the theme default.
 
-Font snippets are separate downloads and do not increase the size of `theme.css`. Original files, licenses and provenance are in [source_fonts/](source_fonts/). The fonts are distributed under the SIL Open Font License 1.1; the iA fonts' upstream README also expresses opposition to bundling them with other text editors.
+Font snippets are separate downloads and do not increase the size of `theme.css`. Original files, licenses and provenance are in [source_fonts/](source_fonts/). iA Writer and JetBrains Mono use the SIL Open Font License 1.1; Menlo and SF Mono retain Apple's proprietary terms. The iA fonts' upstream README also expresses opposition to bundling them with other text editors.
 
 To regenerate the snippets from the local sources:
 
