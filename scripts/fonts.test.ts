@@ -11,11 +11,18 @@ test("font snippets reproduce all original faces and include their license offli
   t.after(() => rmSync(root, { recursive: true, force: true }));
   cpSync(join(ROOT, "source_fonts"), join(root, "source_fonts"), { recursive: true });
   buildFonts(root);
-  for (const family of ["Duo", "Mono", "Quattro"]) {
-    const name = `iA-Writer-${family}.css`;
+  for (const [snippet, family, prefix, format = "woff2"] of [
+    ["iA-Writer-Duo", "iA Writer Duo S", "iAWriterDuoS"],
+    ["iA-Writer-Mono", "iA Writer Mono S", "iAWriterMonoS"],
+    ["iA-Writer-Quattro", "iA Writer Quattro S", "iAWriterQuattroS"],
+    ["JetBrains-Mono", "JetBrains Mono", "JetBrainsMono"],
+    ["Menlo", "Menlo", "Menlo", "woff"],
+    ["SF-Mono", "SF Mono", "SF-Mono", "woff"],
+  ]) {
+    const name = `${snippet}.css`;
     const css = readFileSync(join(root, "snippets", "fonts", name), "utf8");
     assert.equal(css, readFileSync(join(ROOT, "snippets", "fonts", name), "utf8"));
-    assert.ok(css.includes(readFileSync(join(root, "source_fonts", `iA-Writer-${family}-LICENSE.md`), "utf8").trim()));
+    assert.ok(css.includes(readFileSync(join(root, "source_fonts", `${snippet}-LICENSE.md`), "utf8").trim()));
     const faces = [...css.matchAll(/@font-face\s*\{([^}]+)\}/g)];
     assert.equal(faces.length, 4);
     const variants = new Set<string>();
@@ -24,12 +31,13 @@ test("font snippets reproduce all original faces and include their license offli
       const style = face.match(/font-style: (\w+);/)?.[1];
       const variant = `${weight === "700" ? "Bold" : ""}${style === "italic" ? "Italic" : ""}` || "Regular";
       variants.add(variant);
-      const encoded = face.match(/url\("data:font\/woff2;base64,([A-Za-z0-9+/=]+)"\)/)?.[1];
+      const encoded = face.match(/url\("data:font\/woff2?;base64,([A-Za-z0-9+/=]+)"\)/)?.[1];
       assert.ok(encoded);
-      assert.deepEqual(Buffer.from(encoded, "base64"), readFileSync(join(root, "source_fonts", `iAWriter${family}S-${variant}.woff2`)));
+      assert.ok(face.includes(`format("${format}")`));
+      assert.deepEqual(Buffer.from(encoded, "base64"), readFileSync(join(root, "source_fonts", `${prefix}-${variant}.${format}`)));
     }
     assert.equal(variants.size, 4);
-    assert.match(css, new RegExp(`--font-text-theme: "iA Writer ${family} S", monospace;`));
+    assert.ok(css.includes(`--font-text-theme: "${family}", monospace;`));
     assert.match(css, /--font-text: var\(--font-text-theme\);/);
     assert.doesNotMatch(css, /@import|url\("https?:|--font-interface|--font-monospace|--font-text-size|--file-line-width/);
   }
@@ -40,13 +48,18 @@ test("missing or invalid font sources preserve the previous snippets", t => {
   t.after(() => rmSync(root, { recursive: true, force: true }));
   cpSync(join(ROOT, "source_fonts"), join(root, "source_fonts"), { recursive: true });
   cpSync(join(ROOT, "snippets", "fonts"), join(root, "snippets", "fonts"), { recursive: true });
-  const before = ["Duo", "Mono", "Quattro"].map(family => readFileSync(join(root, "snippets", "fonts", `iA-Writer-${family}.css`), "utf8"));
-  const source = join(root, "source_fonts", "iAWriterQuattroS-Regular.woff2");
-  writeFileSync(source, "not a font");
-  assert.throws(() => buildFonts(root), /WOFF2 invalide/);
-  rmSync(source);
-  assert.throws(() => buildFonts(root), /ENOENT/);
-  for (const [i, family] of ["Duo", "Mono", "Quattro"].entries()) {
-    assert.equal(readFileSync(join(root, "snippets", "fonts", `iA-Writer-${family}.css`), "utf8"), before[i]);
+  const names = ["iA-Writer-Duo", "iA-Writer-Mono", "iA-Writer-Quattro", "JetBrains-Mono", "Menlo", "SF-Mono"];
+  const before = names.map(name => readFileSync(join(root, "snippets", "fonts", `${name}.css`), "utf8"));
+  for (const file of ["iAWriterQuattroS-Regular.woff2", "Menlo-Regular.woff"]) {
+    const source = join(root, "source_fonts", file);
+    const original = readFileSync(source);
+    writeFileSync(source, "not a font");
+    assert.throws(() => buildFonts(root), /WOFF2? invalide/);
+    rmSync(source);
+    assert.throws(() => buildFonts(root), /ENOENT/);
+    writeFileSync(source, original);
+  }
+  for (const [i, name] of names.entries()) {
+    assert.equal(readFileSync(join(root, "snippets", "fonts", `${name}.css`), "utf8"), before[i]);
   }
 });

@@ -6,6 +6,8 @@ Minimal isn't minimal enough. Ultra Minimal turns Obsidian into a clean writing 
 
 Ultra Minimal is also lighter in code: about 20 KB of CSS, compared with roughly 270 KB for Minimal.
 
+Ultra Minimal is highly customizable through color and font snippets, no plugin required.
+
 Ultra Minimal handles interface hiding itself, making a plugin such as Hider or ProZen unnecessary for a distraction-free writing workspace.
 
 Notes use Menlo at `23px` by default, with Consolas, DejaVu Sans Mono and monospace fallbacks. The text column is limited to `700px`.
@@ -60,17 +62,18 @@ Disable the snippet to return to Brume 7.
 
 ## Optional fonts
 
-Choose an optional [iA Writer](https://github.com/iaolo/iA-Fonts) font for note text:
+Choose an optional font for note text:
 
 - [iA Writer Duo](snippets/fonts/iA-Writer-Duo.css)
 - [iA Writer Mono](snippets/fonts/iA-Writer-Mono.css)
 - [iA Writer Quattro](snippets/fonts/iA-Writer-Quattro.css)
+- [JetBrains Mono](snippets/fonts/JetBrains-Mono.css)
 
 Download the chosen CSS file using GitHub's **Download raw file** button, copy it into your vault's `.obsidian/snippets/` folder, then refresh and enable it in **Settings → Appearance → CSS snippets**. Enable only one font snippet at a time. It can be combined with a palette snippet.
 
 Each file embeds the original WOFF2 fonts, including regular, italic, bold and bold italic. Fonts work offline without system installation, including on mobile. The snippet overrides the note font selected in Obsidian; interface and code fonts, text size and column width keep their existing settings. Disable it to return to your previous font.
 
-Font snippets are separate downloads and do not increase the size of `theme.css`. Original files, licenses and provenance are in [source_fonts/](source_fonts/). The fonts are distributed under the SIL Open Font License 1.1; iA's upstream README also expresses opposition to bundling them with other text editors.
+Font snippets are separate downloads and do not increase the size of `theme.css`. Original files, licenses and provenance are in [source_fonts/](source_fonts/). The fonts are distributed under the SIL Open Font License 1.1; the iA fonts' upstream README also expresses opposition to bundling them with other text editors.
 
 To regenerate the snippets from the local sources:
 

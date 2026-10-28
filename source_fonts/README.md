@@ -1,9 +1,29 @@
 # Font sources
 
+## iA Writer
+
 Original WOFF2 files from [iA-Fonts](https://github.com/iaolo/iA-Fonts/tree/c6588670c71e9ac628acc27b72cde4bf12726b7f), revision `c6588670c71e9ac628acc27b72cde4bf12726b7f`. Each family includes Regular, Italic, Bold and BoldItalic from its `Webfonts/` directory. Files are preserved without conversion or subsetting.
 
 Copyright © 2018 Information Architects Inc., based on IBM Plex, copyright © 2017 IBM Corp. Each family's original license is included alongside the font files and copied into its generated snippet. The fonts remain under the SIL Open Font License 1.1; the theme's MIT license does not replace it.
 
 The [upstream README](https://github.com/iaolo/iA-Fonts#readme) also states that iA does not approve bundling these fonts with other text editors. These optional snippets are separate from the theme stylesheet and do not imply endorsement by iA.
 
-From the repository root, run `npm run fonts` to regenerate the standalone snippets in `snippets/fonts/` offline.
+## JetBrains Mono
+
+Original WOFF2 files from [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono/tree/19371302b95d218af43299bce79ddbddd0bc364d/fonts/webfonts), revision `19371302b95d218af43299bce79ddbddd0bc364d`. Includes Regular, Italic, Bold and BoldItalic, preserved without conversion or subsetting. The family is also available on [Google Fonts](https://fonts.google.com/specimen/JetBrains+Mono).
+
+Copyright 2020 The JetBrains Mono Project Authors. The original `OFL.txt` is preserved as [JetBrains-Mono-LICENSE.md](JetBrains-Mono-LICENSE.md) and copied into the generated snippet. The font remains under the SIL Open Font License 1.1.
+
+## Apple system fonts
+
+Menlo comes from `/System/Library/Fonts/Menlo.ttc`. Its four faces are Regular (collection index 0), Bold (1), Italic (2) and BoldItalic (3).
+
+SF Mono comes from `/System/Applications/Utilities/Terminal.app/Contents/Resources/Fonts/`: `SF-Mono-Regular.otf`, `SF-Mono-RegularItalic.otf`, `SF-Mono-Bold.otf` and `SF-Mono-BoldItalic.otf`.
+
+The original TTC and OTF files are preserved here. Compressed WOFF copies were prepared with FontTools 4.50.0, without subsetting; font metadata and copyright notices are retained. For Menlo, use `fonttools ttLib Menlo.ttc -y 0 --flavor woff -o Menlo-Regular.woff`, choosing the matching index for each face. For SF Mono, use `fonttools ttLib SF-Mono-Regular.otf --flavor woff -o SF-Mono-Regular.woff`, with the matching input for each style; RegularItalic maps to Italic in the output name.
+
+These are proprietary Apple fonts. [Menlo-LICENSE.md](Menlo-LICENSE.md) records its provenance and applicable macOS terms; [SF-Mono-LICENSE.md](SF-Mono-LICENSE.md) contains the license extracted from the font's metadata. These terms restrict embedding and redistribution. Neither the theme's MIT license nor the OFL licenses for the other fonts grant additional rights to these files.
+
+## Regenerate snippets
+
+From the repository root, run `npm run fonts` to regenerate the standalone snippets in `snippets/fonts/` offline. It embeds the prepared WOFF and WOFF2 files directly; FontTools is only needed to prepare new WOFF copies from Apple originals.
