@@ -53,7 +53,9 @@ Brume 7 is the default palette and needs no snippet. Optional snippets replace i
 | [Sauge](snippets/colors/Sauge.css) | Gray green | 5.15:1 | 6.04:1 |
 | [Brume9](snippets/colors/Brume9.css) | Brume with stronger text contrast | 9.04:1 | 9.05:1 |
 
-Ratios are calculated for body text in light mode and in dark mode, using the [WCAG relative luminance formula](https://www.w3.org/WAI/WCAG22/Techniques/general/G18). All exceed the 4.5:1 minimum on the main background. Papier, Brume5 and Sauge also exceed it on their secondary backgrounds.
+Ratios are calculated for body text in light mode and in dark mode, using the [WCAG relative luminance formula](https://www.w3.org/WAI/WCAG22/Techniques/general/G18). 
+
+Text needs enough contrast against its background to remain readable, especially for people with reduced contrast sensitivity. [WCAG 2.2 level AA](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html) sets a minimum ratio of **4.5:1 for normal-sized text**. This improves text visibility; it does not guarantee reading comfort or prevent eye strain.
 
 1. Copy the chosen CSS file from `snippets/colors/` into your vault's `.obsidian/snippets/` folder.
 2. In **Settings → Appearance → CSS snippets**, refresh the list and enable its name.
@@ -82,12 +84,6 @@ To regenerate the snippets from the local sources:
 ```bash
 npm run fonts
 ```
-
-## Why contrast should be at least 4.5:1
-
-Text needs enough contrast against its background to remain readable, especially for people with reduced contrast sensitivity. [WCAG 2.2 level AA](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html) sets a minimum ratio of **4.5:1 for normal-sized text**.
-
-The default **Brume 7** palette reaches at least **7:1** in both modes, meeting the [enhanced contrast target](https://www.w3.org/WAI/WCAG22/Understanding/contrast-enhanced.html). This improves text visibility; it does not guarantee reading comfort or prevent eye strain.
 
 ## Edit and build
 

@@ -60,10 +60,9 @@ ${license.trim()}
 
 ${faces.join("\n\n")}
 
-body {
-  --font-text-theme: "${family}", monospace;
-  --font-editor-theme: var(--font-text-theme);
-  --font-text: var(--font-text-theme);
+.markdown-source-view.mod-cm6 .cm-scroller,
+.markdown-preview-view {
+  font-family: "${family}", monospace;
 }
 `;
     return { name: `${name}.css`, css };

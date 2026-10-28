@@ -37,8 +37,11 @@ test("font snippets reproduce all original faces and include their license offli
       assert.deepEqual(Buffer.from(encoded, "base64"), readFileSync(join(root, "source_fonts", `${prefix}-${variant}.${format}`)));
     }
     assert.equal(variants.size, 4);
-    assert.ok(css.includes(`--font-text-theme: "${family}", monospace;`));
-    assert.match(css, /--font-text: var\(--font-text-theme\);/);
+    assert.ok(css.includes(`.markdown-source-view.mod-cm6 .cm-scroller,
+.markdown-preview-view {
+  font-family: "${family}", monospace;
+}`));
+    assert.doesNotMatch(css, /(?:^|})\s*body\s*\{|--font-text|--font-editor-theme|(?:^|[;{])\s*(?:color|background(?:-color)?|all)\s*:/);
     assert.doesNotMatch(css, /@import|url\("https?:|--font-interface|--font-monospace|--font-text-size|--file-line-width/);
   }
 });
