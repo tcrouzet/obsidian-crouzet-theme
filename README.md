@@ -44,19 +44,39 @@ Brume 7 is the default palette and needs no snippet. Optional snippets replace i
 | Palette | Tones | Light text contrast | Dark text contrast |
 | --- | --- | --- | --- |
 | Brume 7 (default) | Blue gray, stronger text contrast | 7.04:1 | 7.01:1 |
-| [Solarized](snippets/Solarized.css) | Original Solarized neutral tones | 4.99:1 | 5.61:1 |
-| [Gris](snippets/Gris.css) | Neutral gray | 5.00:1 | 5.65:1 |
-| [Papier](snippets/Papier.css) | Ivory and muted brown | 5.31:1 | 5.88:1 |
-| [Brume](snippets/Brume.css) | Blue gray | 5.18:1 | 6.26:1 |
-| [Sauge](snippets/Sauge.css) | Gray green | 5.15:1 | 6.04:1 |
-| [contrast9](snippets/contrast9.css) | Brume with stronger text contrast | 9.04:1 | 9.05:1 |
+| [Solarized](snippets/colors/Solarized.css) | Original Solarized neutral tones | 4.99:1 | 5.61:1 |
+| [Gris](snippets/colors/Gris.css) | Neutral gray | 5.00:1 | 5.65:1 |
+| [Papier](snippets/colors/Papier.css) | Ivory and muted brown | 5.31:1 | 5.88:1 |
+| [Brume](snippets/colors/Brume.css) | Blue gray | 5.18:1 | 6.26:1 |
+| [Sauge](snippets/colors/Sauge.css) | Gray green | 5.15:1 | 6.04:1 |
+| [contrast9](snippets/colors/contrast9.css) | Brume with stronger text contrast | 9.04:1 | 9.05:1 |
 
 Ratios are calculated for body text in light mode and in dark mode, using the [WCAG relative luminance formula](https://www.w3.org/WAI/WCAG22/Techniques/general/G18). All exceed the 4.5:1 minimum on the main background. Papier, Brume and Sauge also exceed it on their secondary backgrounds.
 
-1. Copy the chosen CSS file from `snippets/` into your vault's `.obsidian/snippets/` folder.
+1. Copy the chosen CSS file from `snippets/colors/` into your vault's `.obsidian/snippets/` folder.
 2. In **Settings → Appearance → CSS snippets**, refresh the list and enable its name.
 
 Disable the snippet to return to Brume 7.
+
+## Optional fonts
+
+Choose an optional [iA Writer](https://github.com/iaolo/iA-Fonts) font for note text:
+
+- [iA Writer Duo](snippets/fonts/iA-Writer-Duo.css)
+- [iA Writer Mono](snippets/fonts/iA-Writer-Mono.css)
+- [iA Writer Quattro](snippets/fonts/iA-Writer-Quattro.css)
+
+Download the chosen CSS file using GitHub's **Download raw file** button, copy it into your vault's `.obsidian/snippets/` folder, then refresh and enable it in **Settings → Appearance → CSS snippets**. Enable only one font snippet at a time. It can be combined with a palette snippet.
+
+Each file embeds the original WOFF2 fonts, including regular, italic, bold and bold italic. Fonts work offline without system installation, including on mobile. The snippet overrides the note font selected in Obsidian; interface and code fonts, text size and column width keep their existing settings. Disable it to return to your previous font.
+
+Font snippets are separate downloads and do not increase the size of `theme.css`. Original files, licenses and provenance are in [source_fonts/](source_fonts/). The fonts are distributed under the SIL Open Font License 1.1; iA's upstream README also expresses opposition to bundling them with other text editors.
+
+To regenerate the snippets from the local sources:
+
+```bash
+npm run fonts
+```
 
 ## Why contrast should be at least 4.5:1
 

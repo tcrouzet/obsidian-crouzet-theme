@@ -5,8 +5,9 @@
   "engines": { "node": ">=24.12.0" },
   "scripts": {
     "build": "node scripts/build.ts",
+    "fonts": "node scripts/fonts.ts",
     "dev": "node --watch scripts/build.ts --watch",
-    "check": "node --test scripts/build.test.ts",
+    "check": "node --test scripts/build.test.ts scripts/fonts.test.ts",
     "test": "npm run check && node --test scripts/release.test.ts"
   }
 }
