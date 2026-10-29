@@ -23,6 +23,24 @@ export function buildFonts(root = ROOT): void {
       normalWeight: 400,
     },
     {
+      name: "Rubik",
+      family: "Rubik",
+      prefix: "Rubik",
+      source: "https://github.com/google/fonts/tree/main/ofl/rubik",
+      format: "ttf",
+      variable: true,
+      weightRange: "300 900",
+      fallback: "sans-serif",
+    },
+    {
+      name: "Bookerly",
+      family: "Amazon Bookerly",
+      prefix: "Bookerly",
+      source: "https://developer.amazon.com/en-US/alexa/branding/echo-guidelines/identity-guidelines/typography",
+      format: "ttf",
+      fallback: "serif",
+    },
+    {
       name: "JetBrains-Mono",
       family: "JetBrains Mono",
       prefix: "JetBrainsMono",
@@ -44,11 +62,11 @@ export function buildFonts(root = ROOT): void {
       format: "woff",
       medium: true,
     },
-  ].map(({ name, family, prefix, source, format = "woff2", variable = false, medium = false, licenseName = name, normalWeight }) => {
+  ].map(({ name, family, prefix, source, format = "woff2", variable = false, medium = false, licenseName = name, normalWeight, weightRange = "400 700", fallback = "monospace" }) => {
     const license = readFileSync(join(root, "source_fonts", `${licenseName}-LICENSE.md`), "utf8");
     const faces = (variable ? [
-      ["Regular", "400 700", "normal"],
-      ["Italic", "400 700", "italic"],
+      ["Regular", weightRange, "normal"],
+      ["Italic", weightRange, "italic"],
     ] : [
       ["Regular", 400, "normal"],
       ["Italic", 400, "italic"],
@@ -83,7 +101,7 @@ ${faces.join("\n\n")}
 
 .markdown-source-view.mod-cm6 .cm-scroller,
 .markdown-preview-view {
-  font-family: "${family}", monospace;${normalWeight ? `\n  font-weight: ${normalWeight};` : ""}
+  font-family: "${family}", ${fallback};${normalWeight ? `\n  font-weight: ${normalWeight};` : ""}
 }
 `;
     return { name: `${name}.css`, css };

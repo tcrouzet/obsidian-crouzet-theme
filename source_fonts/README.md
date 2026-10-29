@@ -14,6 +14,18 @@ Original WOFF2 files from [JetBrains Mono](https://github.com/JetBrains/JetBrain
 
 Copyright 2020 The JetBrains Mono Project Authors. The original `OFL.txt` is preserved as [JetBrains-Mono-LICENSE.md](JetBrains-Mono-LICENSE.md) and copied into the generated snippet. The font remains under the SIL Open Font License 1.1.
 
+## Rubik
+
+Original variable TTF files from [Google Fonts](https://github.com/google/fonts/tree/8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5/ofl/rubik), revision `8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5`. `Rubik[wght].ttf` and `Rubik-Italic[wght].ttf` are stored as `Rubik.ttf` and `Rubik-Italic.ttf`, with their bytes unchanged. Both cover weights 300–900, including the theme's 500 body weight. The family is also available on [Google Fonts](https://fonts.google.com/specimen/Rubik).
+
+Copyright 2015 The Rubik Project Authors. The original `OFL.txt` is preserved as [Rubik-LICENSE.md](Rubik-LICENSE.md) and copied into the generated snippet. The font remains under the SIL Open Font License 1.1.
+
+## Amazon Bookerly
+
+Original `Bookerly-Regular.ttf`, `Bookerly-Italic.ttf`, `Bookerly-Bold.ttf` and `Bookerly-BoldItalic.ttf` from Amazon's [complete font set](https://developer.amazon.com/en-US/alexa/branding/echo-guidelines/identity-guidelines/typography), archive [Amazon_Typefaces_Complete_Font_Set_Mar2020.zip](https://m.media-amazon.com/images/G/01/mobile-apps/dex/alexa/branding/Amazon_Typefaces_Complete_Font_Set_Mar2020.zip). These are the eInk faces, supplied at weights 400 and 700; there is no Medium 500 face in this set. Filenames, font bytes and embedded ownership notices are preserved without conversion or subsetting.
+
+Copyright 2014 Dalton Maag Ltd. The archive's `Amazon Ember Licensing Guidelines.pdf` covers Bookerly and is transcribed in [Bookerly-LICENSE.md](Bookerly-LICENSE.md), which is included in the generated snippet. Bookerly remains proprietary. The supplied guidelines permit including the designs in your work without license payments or royalties, require retaining the proper font names, and require the Amazon prefix when naming the font in a menu or text option dialog. The CSS uses the family alias `Amazon Bookerly`; the font files themselves are unchanged. The theme's MIT license does not replace Amazon's terms.
+
 ## Apple system fonts
 
 Menlo comes from `/System/Library/Fonts/Menlo.ttc`. Its four faces are Regular (collection index 0), Bold (1), Italic (2) and BoldItalic (3).

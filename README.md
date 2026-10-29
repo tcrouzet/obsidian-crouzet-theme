@@ -73,12 +73,14 @@ SF Mono is the default note font when available on your device. To embed it or u
 - [iA Writer Mono](snippets/fonts/iA-Writer-Mono.css)
 - [iA Writer Quattro](snippets/fonts/iA-Writer-Quattro.css)
 - [JetBrains Mono](snippets/fonts/JetBrains-Mono.css)
+- [Rubik](snippets/fonts/Rubik.css) — proportional sans serif
+- [Amazon Bookerly](snippets/fonts/Bookerly.css) — proportional serif
 
 Download the chosen CSS file using GitHub's **Download raw file** button, copy it into your vault's `.obsidian/snippets/` folder, then refresh and enable it in **Settings → Appearance → CSS snippets**. Enable only one font snippet at a time. It can be combined with a palette snippet.
 
-Each file embeds its fonts, including regular, italic, bold and bold italic. iA Writer uses variable TTF fonts covering weights 400–700; JetBrains Mono and SF Mono include Medium 500 to match the theme's body weight. Menlo supplies only Regular 400 and Bold 700. Fonts work offline, including on mobile. The snippet overrides the note font selected in Obsidian; palette colors, interface and code fonts, text size and column width keep their existing settings. Disable it to restore your Obsidian font preference, with SF Mono as the theme default.
+Each file embeds its fonts, including regular, italic, bold and bold italic. iA Writer uses variable TTF fonts covering weights 400–700; Rubik covers 300–900. JetBrains Mono and SF Mono include Medium 500 to match the theme's body weight. Menlo and Bookerly supply only Regular 400 and Bold 700. Fonts work offline, including on mobile. The snippet overrides the note font selected in Obsidian; palette colors, interface and code fonts, text size and column width keep their existing settings. Disable it to restore your Obsidian font preference, with SF Mono as the theme default.
 
-Font snippets are separate downloads and do not increase the size of `theme.css`. Original files, licenses and provenance are in [source_fonts/](source_fonts/). iA Writer and JetBrains Mono use the SIL Open Font License 1.1; Menlo and SF Mono retain Apple's proprietary terms. The iA fonts' upstream README also expresses opposition to bundling them with other text editors.
+Font snippets are separate downloads and do not increase the size of `theme.css`. Original files, licenses and provenance are in [source_fonts/](source_fonts/). iA Writer, JetBrains Mono and Rubik use the SIL Open Font License 1.1; Menlo and SF Mono retain Apple's proprietary terms. Bookerly retains Amazon's proprietary terms and the usage guidelines included in its official download. The iA fonts' upstream README also expresses opposition to bundling them with other text editors.
 
 To regenerate the snippets from the local sources:
 

@@ -16,6 +16,8 @@ test("font snippets reproduce all original faces and include their license offli
     ["iA-Writer-Duo-Regular", "iA Writer Duo V", "iAWriterDuoV", "ttf", true, false, 400],
     ["iA-Writer-Mono", "iA Writer Mono V", "iAWriterMonoV", "ttf", true],
     ["iA-Writer-Quattro", "iA Writer Quattro V", "iAWriterQuattroV", "ttf", true],
+    ["Rubik", "Rubik", "Rubik", "ttf", true],
+    ["Bookerly", "Amazon Bookerly", "Bookerly", "ttf"],
     ["JetBrains-Mono", "JetBrains Mono", "JetBrainsMono", "woff2", false, true],
     ["Menlo", "Menlo", "Menlo", "woff"],
     ["SF-Mono", "SF Mono", "SF-Mono", "woff", false, true],
@@ -31,6 +33,7 @@ test("font snippets reproduce all original faces and include their license offli
     const variants = new Set<string>();
     for (const [, face] of faces) {
       const weight = face.match(/font-weight: ([\d ]+);/)?.[1];
+      if (variable) assert.equal(weight, snippet === "Rubik" ? "300 900" : "400 700");
       const style = face.match(/font-style: (\w+);/)?.[1];
       const variant = `${weight === "700" ? "Bold" : weight === "500" ? "Medium" : ""}${style === "italic" ? "Italic" : ""}` || "Regular";
       variants.add(variant);
@@ -43,7 +46,7 @@ test("font snippets reproduce all original faces and include their license offli
     assert.equal(variants.size, count);
     assert.ok(css.includes(`.markdown-source-view.mod-cm6 .cm-scroller,
 .markdown-preview-view {
-  font-family: "${family}", monospace;${normalWeight ? `\n  font-weight: ${normalWeight};` : ""}
+  font-family: "${family}", ${snippet === "Rubik" ? "sans-serif" : snippet === "Bookerly" ? "serif" : "monospace"};${normalWeight ? `\n  font-weight: ${normalWeight};` : ""}
 }`));
     assert.doesNotMatch(css, /(?:^|})\s*body\s*\{|--font-text|--font-editor-theme|(?:^|[;{])\s*(?:color|background(?:-color)?|all)\s*:/);
     assert.doesNotMatch(css, /@import|url\("https?:|--font-interface|--font-monospace|--font-text-size|--file-line-width/);
@@ -55,9 +58,9 @@ test("missing or invalid font sources preserve the previous snippets", t => {
   t.after(() => rmSync(root, { recursive: true, force: true }));
   cpSync(join(ROOT, "source_fonts"), join(root, "source_fonts"), { recursive: true });
   cpSync(join(ROOT, "snippets", "fonts"), join(root, "snippets", "fonts"), { recursive: true });
-  const names = ["iA-Writer-Duo", "iA-Writer-Duo-Regular", "iA-Writer-Mono", "iA-Writer-Quattro", "JetBrains-Mono", "Menlo", "SF-Mono"];
+  const names = ["iA-Writer-Duo", "iA-Writer-Duo-Regular", "iA-Writer-Mono", "iA-Writer-Quattro", "Rubik", "Bookerly", "JetBrains-Mono", "Menlo", "SF-Mono"];
   const before = names.map(name => readFileSync(join(root, "snippets", "fonts", `${name}.css`), "utf8"));
-  for (const file of ["iAWriterQuattroV.ttf", "JetBrainsMono-Regular.woff2", "Menlo-Regular.woff"]) {
+  for (const file of ["iAWriterQuattroV.ttf", "Rubik.ttf", "Rubik-Italic.ttf", "Bookerly-Regular.ttf", "JetBrainsMono-Regular.woff2", "Menlo-Regular.woff"]) {
     const source = join(root, "source_fonts", file);
     const original = readFileSync(source);
     writeFileSync(source, "not a font");
@@ -72,11 +75,14 @@ test("missing or invalid font sources preserve the previous snippets", t => {
 });
 
 test("font snippets supply the theme's 500 weight in upright and italic styles when available", () => {
-  for (const name of ["iA-Writer-Duo", "iA-Writer-Mono", "iA-Writer-Quattro", "JetBrains-Mono", "SF-Mono"]) {
+  for (const name of ["iA-Writer-Duo", "iA-Writer-Mono", "iA-Writer-Quattro", "Rubik", "JetBrains-Mono", "SF-Mono"]) {
     const css = readFileSync(join(ROOT, "snippets", "fonts", `${name}.css`), "utf8");
     const faces = [...css.matchAll(/@font-face\s*\{([^}]+)\}/g)].map(([, face]) => face);
     for (const style of ["normal", "italic"]) {
-      assert.ok(faces.some(face => face.includes(`font-style: ${style};`) && /font-weight: (?:500|400 700);/.test(face)), `${name}: weight 500 ${style} missing`);
+      assert.ok(faces.some(face => {
+        const weights = face.match(/font-weight: ([\d ]+);/)![1].split(" ").map(Number);
+        return face.includes(`font-style: ${style};`) && weights[0] <= 500 && weights.at(-1)! >= 500;
+      }), `${name}: weight 500 ${style} missing`);
     }
   }
 });
